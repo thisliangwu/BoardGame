@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
  * in the Board class, which are used by the isClearPath method in the
  * Board class.
  */
-public class Square extends Button {
+class Square extends Button {
     /**Square size. */
     public static final int SQRSIZE = 100;
     /** Piece that is now on this Square. */
@@ -26,7 +26,7 @@ public class Square extends Button {
      * @param Y
      *          vertical coordinate of this Square
      */
-    public Square(int X, int Y) {
+    Square(int X, int Y) {
         x = X;
         y = Y;
         if ((x + y) % 2 == 0) {
@@ -42,12 +42,12 @@ public class Square extends Button {
     }
     
     /** Add the specified css class to the Square. */
-    public final void toggleOn(String s) {    
+    final void toggleOn(String s) {    
         getStyleClass().add(s);
     }
     
     /** Remove the specified css class from the Square. */
-    public final void toggleOff(String s) {
+    final void toggleOff(String s) {
         getStyleClass().removeAll(s);
     }
     
@@ -55,7 +55,7 @@ public class Square extends Button {
     /** Piece getter.
      * @return the Piece on this Square.
      */
-    public Piece getPiece() {
+    Piece getPiece() {
         return p;
     }
     
@@ -63,7 +63,7 @@ public class Square extends Button {
      * @param P
      *          the target Piece 
      * */
-    public void setPiece(Piece P) {
+    void setPiece(Piece P) {
         p = P;
         setSquareStyle(P);
     }
@@ -85,14 +85,14 @@ public class Square extends Button {
     /** horizontal index coordinate of this Square.
      * @return horizontal index of this Square as an int
      */
-    public int getX() {
+    int getX() {
         return x;
     }
     
     /** vertical index coordinate of this Square.
      * @return vertical index coordinate of this Square.
      */
-    public int getY() {
+    int getY() {
         return y;
     }
 }

@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+/** Board game Pieces. */
+enum Pieces {
+    PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING
+}
 
 /** The Piece class is an abstract class that store the information
  * of this Piece along with getter method.
@@ -7,7 +10,7 @@ import java.util.ArrayList;
  * Subclass should override this movable method and also call super.movable
  * method to calculate if this Piece can be moved to the target Square.
  */
-public abstract class Piece {
+abstract class Piece {
     /** The player that this Piece belongs to. */
     private Player player;
     /** The vertical index of this Piece on the Board. */
@@ -15,7 +18,7 @@ public abstract class Piece {
     /** The horizontal index of this Piece on the Board. */
     private int y;
     /** The name of this Piece. */
-    private String pCode;
+    private Pieces pCode;
     /** Image name of this piece. */
     private String img;
     /** Piece move steps. */
@@ -32,7 +35,7 @@ public abstract class Piece {
      * @param Y
      *          The vertical index of this Piece on the Board
      */
-    Piece(String n, Player p, int X, int Y) {
+    Piece(Pieces n, Player p, int X, int Y) {
         pCode = n;
         player = p;
         x = X;
@@ -42,14 +45,14 @@ public abstract class Piece {
     /** Piece name getter.
      * @return The name of this piece.
      */
-    public final String getPieceCode() {
+   public final Pieces getPieceCode() {
         return pCode;
     }
     
     /** Player name getter.
      * @return The player that this Piece belongs to
      */
-    public final Player getPlayer() {
+    final Player getPlayer() {
         return player;
     }
     
@@ -57,7 +60,7 @@ public abstract class Piece {
      * Horizontal index getter.
      * @return The vertical index of this Piece on the Board.
      */
-    public final int getX() {
+    final int getX() {
         return x;
     }
     
@@ -65,17 +68,28 @@ public abstract class Piece {
      * Vertical index getter.
      * @return The horizontal index of this Piece on the Board.
      */
-    public final int getY() {
+    final int getY() {
         return y;
     }
     
-    public final void moveTo(int X, int Y) {
+    /**
+     * Move this Piece to the specified position.
+     * @param X
+     *          horizontal index in the Board
+     * @param Y
+     *          vertical index in the board
+     */
+    final void moveTo(int X, int Y) {
         x = X;
         y = Y;
         steps++;
     }
     
-    public final int getSteps() {
+    /**
+     * Return the steps this Piece has taken.
+     * @return steps as int
+     */
+    final int getSteps() {
         return steps;
     }
     
@@ -84,7 +98,7 @@ public abstract class Piece {
      * @param s
      *          of the image
      */
-    protected final void setImgSrc(String s) {
+    final void setImgSrc(String s) {
         img = s;
     }
     
@@ -92,21 +106,8 @@ public abstract class Piece {
      * Return the name of this Piece image.
      * @return the name as String
      */
-    public final String getImgSrc() {
+    final String getImgSrc() {
         return img;
-    }
-    
-    /**
-     * Filter non-reachable Squares using movable method.
-     * @param targets
-     *          potential target Squares
-     * @return valid target Square list
-     */
-    public final ArrayList<Square> showTargets(ArrayList<Square> targets) {
-        for(int i = (targets.size() - 1); i >= 0; i--)
-            if(!movable(targets.get(i)))
-                targets.remove(targets.get(i));
-        return targets;            
     }
     
     /** This movable only validate if the target and the selected piece 
@@ -120,7 +121,7 @@ public abstract class Piece {
      *          target Square that this Piece trying to move to
      * @return true or false if this piece can move to the target Square
      */
-    public boolean movable(Square t) {
+    boolean movable(Square t) {
         return t.getPiece() == null || getPlayer() != t.getPiece().getPlayer();
     };
 }

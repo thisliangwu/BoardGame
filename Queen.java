@@ -1,5 +1,5 @@
 /** Queen Piece in the chess game. */
-public class Queen extends Piece {
+class Queen extends Piece {
     
     /**
      * Initialize the player and the position of this piece.
@@ -11,12 +11,12 @@ public class Queen extends Piece {
      *          The horizontal index of this Piece on the Board
      */
     Queen(Player player, int x, int y) {
-        super("Q", player, x, y);
-        setImgSrc(player.getSide() == Side.WHITE ? "wq.png" : "bq.png");
+        super(Pieces.QUEEN, player, x, y);
+        setImgSrc(player.getSide() == Sides.WHITE ? "wq.png" : "bq.png");
     }
 
     @Override
-    public boolean movable(Square t) {
+    boolean movable(Square t) {
         return super.movable(t);
     }  
 }

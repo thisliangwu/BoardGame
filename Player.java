@@ -1,7 +1,7 @@
 /** two side of a chess game. */
-enum Side {
+enum Sides {
     //WHITE is the first move Player
-    WHITE, BLACK
+    WHITE, BLACK;
 }
 
 /** Board game Player information. */
@@ -9,7 +9,9 @@ public class Player {
     /** Name of the Player. */
     private final String name;
     /** white / black side. */
-    private Side side;
+    private Sides side;
+    /** number of turn this Player have moved. */
+    private int turns;
     
     /** Initialize the player's information.
      * 
@@ -18,22 +20,33 @@ public class Player {
      * @param s
      *          white / black of the player
      */
-    public Player(String n, Side s) {
+    Player(String n, Sides s) {
         name = n;
         side = s;
+        turns = 0;
     }
     
     /** Player name getter. 
      * @return the name of the Player
      */
-    public final String getName() { 
+    final String getName() { 
         return name; 
     }
     
     /** Return which side this Player is.
      * @return side of this player.
      */
-    public final Side getSide() {
+    final Sides getSide() {
         return side;
+    }
+    
+    /** End the current turn and increment counter. */
+    final void endTurn() {
+        turns++;
+    }
+    
+    /** Number of turns this player have taken. */
+    final int getTurn() {
+        return turns;
     }
 }

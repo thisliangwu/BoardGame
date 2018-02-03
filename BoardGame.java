@@ -13,8 +13,8 @@ public abstract class BoardGame {
     private Player white, black;
     /** Current turn player. */
     private Player crp;
-    /** Game board. */
-    protected Board board;
+//    /** Game board. */
+//    protected Board board;
     
     /**
      * Initialize the Board game information.
@@ -25,20 +25,17 @@ public abstract class BoardGame {
      * @param bs
      *          Board game dimension
      */
-    public BoardGame(Player p1, Player p2, int bs) {
+    BoardGame(Player p1, Player p2, int bs) {
         white = p1;
         black = p2;
         crp = white;
         boardSize = bs;
     }
     
-    /** Child class need to override this method to pass the 
-     * Board to the protected board object and set up the Pieces
-     * on the board.
-     * @param b
-     *          the Board that this Board Game is on
+    /** Child class need to override this method set up the Pieces
+     * on the board with Baord.getSquare method.
      */
-    abstract void setBoard(Board b);
+    abstract void setBoard();
     
     /** Check the Board if the path between two Square are clear. 
      * Clear means that there is no obstacle (other Piece) in the moving
@@ -49,20 +46,21 @@ public abstract class BoardGame {
      *          the targeted Square to move the Piece into
      * @return true or false if the path is clear
      */
-    public abstract boolean isClearPath(Square m, Square t);
+    abstract boolean isClearPath(Square m, Square t);
     
     /**
-     * Return an array of potential target of the Piece on this Square.
+     * Return an array of potential targets for the Piece on this Square.
      * @param m
      *          the Square of the Piece to be moved
      * @return Square list that this Piece can be moved to
      */
-    public final ArrayList<Square> path(Square m) {
+    final ArrayList<Square> march(Square m) {
         ArrayList<Square> list = new ArrayList<>();
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (isClearPath(m, board.getSquares()[i][j]))
-                    list.add(board.getSquares()[i][j]);
+                if (isClearPath(m, Board.getSquare(i, j))
+                        || m.getPiece().movable(Board.getSquare(i, j)))
+                    list.add(Board.getSquare(i, j));
             }
         }
         return list;
@@ -72,7 +70,7 @@ public abstract class BoardGame {
      * Return the first move player.
      * @return first move Player
      */
-    public final Player getFirstPlayer() {
+    final Player getFirstPlayer() {
         return white;
     }
     
@@ -80,7 +78,7 @@ public abstract class BoardGame {
      * Return the second player.
      * @return second Player.
      */
-    public final Player getSecondPlayer() {
+    final Player getSecondPlayer() {
         return black;
     }
     
@@ -88,7 +86,7 @@ public abstract class BoardGame {
      * Return the board size of this Chess game.
      * @return board size as an integer.
      */
-    public final int getBoardSize() {
+    final int getBoardSize() {
         return boardSize;
     }
     
@@ -96,12 +94,18 @@ public abstract class BoardGame {
      * @param p target player 
      * @return true or false the target player is in turn to move
      */
-    public final boolean isInTurn(Player p) {
+    final boolean isInTurn(Player p) {
         return crp == p;
     }
     
     /** Ends the current player's turn. */
-    public final void endTurn() {
-        crp = (crp == white) ? black : white;
+    final void endTurn() {
+        if (crp == white) {
+            white.endTurn();
+            crp = black;
+        } else {
+            black.endTurn();
+            crp = white;
+        }
     } 
 }

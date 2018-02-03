@@ -19,7 +19,7 @@ public class ClickHandler implements EventHandler<ActionEvent> {
      * @param bg
      *          the current board game
      */
-    public ClickHandler(BoardGame bg) {
+    ClickHandler(BoardGame bg) {
         boardGame = bg;
     }
     
@@ -31,22 +31,21 @@ public class ClickHandler implements EventHandler<ActionEvent> {
                     && boardGame.isInTurn(click.getPiece().getPlayer())) {
                 selected = click;
                 selected.toggleOn("selected"); //highlight selected Piece
-                targets = boardGame.path(selected); //filter non possible Squares
-                targets = click.getPiece().showTargets(targets);
-                togglePath("ON"); //show path
+//                targets = boardGame.march(selected); //filter non possible Squares
+//                togglePath("ON"); //highlight path with toggle class
             }  
         } else { //try to move the selected Piece
             if (selected == click) { //double click the Piece to cancel select.
-                HighlightOff();
+                highlightOff();
                 return;
             }  
             if (boardGame.isClearPath(selected, click) 
-                    && selected.getPiece().movable(click)) {
-                click.setPiece(selected.getPiece()); //Move the selected Piece and eat the origin Piece
-                selected.getPiece().moveTo(click.getX(), click.getY());
-                //remove recorded information for the selected Square.
-                selected.setPiece(null);
-                HighlightOff();
+                    || selected.getPiece().movable(click)) {
+                click.setPiece(selected.getPiece()); //eat the origin Piece
+                selected.getPiece().moveTo(click.getX(), click.getY()); //move the selected Piece
+                isPawnFirstMove(); // for Pawn enpassant perform
+                selected.setPiece(null); //remove recorded information for the selected Square.
+                highlightOff();
                 //------------------------------
                 boardGame.endTurn();
             }    
@@ -54,13 +53,24 @@ public class ClickHandler implements EventHandler<ActionEvent> {
     }
     
     /**
+     * Check if it is the first move of Pawn. If true record the current 
+     * Player turn to the Pawn for enpassant move calculation.
+     */
+    private void isPawnFirstMove() {
+        Piece piece = selected.getPiece();
+        if (piece.getPieceCode() == Pieces.PAWN && piece.getSteps() == 1) {
+            ((Pawn) piece).setPlayerTurn(piece.getPlayer().getTurn());
+        }
+    }
+    
+    /**
      * Remove the highlight Selected Square and potential targets.
      */
-    private void HighlightOff() {
+    private void highlightOff() {
         selected.toggleOff("selected");
         selected = null;
-        togglePath("OFF");
-        targets = null;
+//        togglePath("OFF");
+//        targets = null;
     }
     
     /**

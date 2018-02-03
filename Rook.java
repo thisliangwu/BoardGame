@@ -1,5 +1,5 @@
 /** Rook Piece in the chess game. */
-public class Rook extends Piece {
+class Rook extends Piece {
     
     /**
      * Initialize the player and the position of this piece.
@@ -11,12 +11,12 @@ public class Rook extends Piece {
      *          The horizontal index of this Piece on the Board
      */
     Rook(Player player, int x, int y) {
-        super("R", player, x, y);
-        setImgSrc(player.getSide() == Side.WHITE ? "wr.png" : "br.png");
+        super(Pieces.ROOK, player, x, y);
+        setImgSrc(player.getSide() == Sides.WHITE ? "wr.png" : "br.png");
     }
 
     @Override
-    public boolean movable(Square t) {
+    boolean movable(Square t) {
         return super.movable(t);
     }  
 }

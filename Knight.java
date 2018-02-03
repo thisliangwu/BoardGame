@@ -1,5 +1,5 @@
 /** Knight Piece in the chess game. */
-public class Knight extends Piece {
+class Knight extends Piece {
     
     /**
      * Initialize the player and the position of this piece.
@@ -11,12 +11,12 @@ public class Knight extends Piece {
      *          The horizontal index of this Piece on the Board
      */
     Knight(Player player, int x, int y) {
-        super("K", player, x, y);
-        setImgSrc(player.getSide() == Side.WHITE ? "wn.png" : "bn.png");
+        super(Pieces.KNIGHT, player, x, y);
+        setImgSrc(player.getSide() == Sides.WHITE ? "wn.png" : "bn.png");
     }
 
     @Override
-    public boolean movable(Square t) {
+    boolean movable(Square t) {
         return super.movable(t);
     }  
 }

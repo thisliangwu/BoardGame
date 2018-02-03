@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Scene;
@@ -15,11 +13,9 @@ public class BoardGameGUI extends Application {
     
     @Override
     public void start(Stage stage) {
-        BoardGame boardGame = new ChessGame(
-                new Player(null, Side.WHITE),
-                new Player(null, Side.BLACK));
+        BoardGame boardGame = new ChessGame(new Player(null, Sides.WHITE),new Player(null, Sides.BLACK));
         Board board = new Board(boardGame);
-        boardGame.setBoard(board);
+        boardGame.setBoard();
         
         FlowPane root = new FlowPane(board);
         
@@ -46,7 +42,8 @@ public class BoardGameGUI extends Application {
  */
 class Board extends GridPane {
     /**Square array to track the position of different Squares.*/
-    private Square[][] sqrs;
+    private static Square[][] sqrs;
+//    private Square[][] sqrs;
     
     /** Initialize the board.
      * @param boardGame
@@ -66,11 +63,16 @@ class Board extends GridPane {
         }
     }
     
-     /**
-      * Get the Squares layout.
-      * @return 2 dimension Square arrays
-      */
-     final Square[][] getSquares() {
-         return sqrs;
-     }
+    /** Get the Square at the specified Coordinates. */
+    static Square getSquare(int x, int y) {
+        return sqrs[x][y];
+    }
+    
+//     /**
+//      * Get the Squares layout.
+//      * @return 2 dimension Square arrays
+//      */
+//     Square[][] getSquares() {
+//         return sqrs;
+//     }
 }

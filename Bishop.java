@@ -1,5 +1,5 @@
 /** Bishop Piece in the chess game. */
-public class Bishop extends Piece {
+class Bishop extends Piece {
     
     /**
      * Initialize the player and the position of this piece.
@@ -11,12 +11,12 @@ public class Bishop extends Piece {
      *          The horizontal index of this Piece on the Board
      */
     Bishop(Player player, int x, int y) {
-        super("K", player, x, y);
-        setImgSrc(player.getSide() == Side.WHITE ? "wb.png" : "bb.png");
+        super(Pieces.BISHOP, player, x, y);
+        setImgSrc(player.getSide() == Sides.WHITE ? "wb.png" : "bb.png");
     }
 
     @Override
-    public boolean movable(Square t) {
+    boolean movable(Square t) {
         return super.movable(t);
     }  
 }

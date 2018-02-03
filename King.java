@@ -1,6 +1,6 @@
 /** King Piece in the chess game. */
-public class King extends Piece {
-    
+class King extends Piece {
+
     /**
      * Initialize the player and the position of this piece.
      * @param player
@@ -11,12 +11,12 @@ public class King extends Piece {
      *          The horizontal index of this Piece on the Board
      */
     King(Player player, int x, int y) {
-        super("K", player, x, y);
-        setImgSrc(player.getSide() == Side.WHITE ? "wk.png" : "bk.png");
+        super(Pieces.KING, player, x, y);
+        setImgSrc(player.getSide() == Sides.WHITE ? "wk.png" : "bk.png");
     }
-
+    
     @Override
-    public boolean movable(Square t) {
+    boolean movable(Square t) {
         return super.movable(t);
     }  
 }
