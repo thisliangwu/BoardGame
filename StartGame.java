@@ -25,7 +25,7 @@ public class StartGame extends Application {
         int sceneSize = boardGame.getBoardSize() * Square.SQRSIZE;
         Scene scene = new Scene(root, sceneSize, sceneSize);
         
-        stage.setTitle("Chess");
+        stage.setTitle(boardGame.getClass().getSimpleName());
         stage.setScene(scene);
         stage.show();
     }

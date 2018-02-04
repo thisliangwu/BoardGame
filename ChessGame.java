@@ -44,7 +44,9 @@ class ChessGame extends BoardGame {
     
     @Override
     void endTurn(Square selected, Square target) {
-        isPawnFirstMove(selected);
+        pawnFirstMove(selected);
+//        kingCastling(selected, target);
+        pawnEnpassant(selected, target);
         try {
             if (target.getPiece().getPieceType() == Pieces.KING)
                 System.out.println("GAME OVER");
@@ -57,13 +59,33 @@ class ChessGame extends BoardGame {
     /**
      * Check if it is the first move of Pawn. If true record the current 
      * Player turn to the Pawn for enpassant move calculation.
-     * @param selected
+     * @param s
      *              potential PAWN first move
      */
-    private void isPawnFirstMove(Square selected) {
-        Piece piece = selected.getPiece();
+    private void pawnFirstMove(Square s) {
+        Piece piece = s.getPiece();
         if (piece.getPieceType() == Pieces.PAWN && piece.getSteps() == 0) {
             ((Pawn) piece).setMoveTurn(piece.getPlayer().getTurn());
+        }
+    }
+    
+    /**Perform pawn enpassant.  */
+    private void pawnEnpassant(Square s, Square t) {
+        
+    }
+    
+    /**Perform king castling. */
+    private void kingCastling(Square s, Square t) {
+        int l = t.getX() - 1, r = t.getX() + 1, y = t.getY();
+        if (s.getPiece().getPieceType() == Pieces.KING) {
+            if (((King) s.getPiece()).leftCastling(t)) {
+                Board.getSquare(r, y).setPiece(Board.getSquare(l, y).getPiece());
+                Board.getSquare(l, y).setPiece(null);
+            }
+            if (((King) s.getPiece()).rightCastling(t)) {
+                Board.getSquare(l, y).setPiece(Board.getSquare(r, y).getPiece());
+                Board.getSquare(r, y).setPiece(null);
+            }
         }
     }
 }

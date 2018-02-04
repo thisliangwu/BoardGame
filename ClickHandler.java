@@ -34,7 +34,14 @@ class ClickHandler implements EventHandler<ActionEvent> {
             if (selected == click) { //double click the Piece to cancel select.
                 pathOff();
                 return;
-            }  
+            } //change selected Piece to move
+            if (click.getPiece() != null && selected.getPiece().getPlayer() 
+                    == click.getPiece().getPlayer()) {
+                pathOff(); 
+                selected = click;
+                pathOn();
+                return;
+            }
             if (selected.getPiece().movable(click)) {
                 //perform the move and end the turn
                 boardGame.endTurn(selected, click); 
