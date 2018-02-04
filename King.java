@@ -12,11 +12,21 @@ class King extends Piece {
      */
     King(Player player, int x, int y) {
         super(Pieces.KING, player, x, y);
-        setImgSrc(player.getSide() == Sides.WHITE ? "wk.png" : "bk.png");
     }
     
     @Override
     boolean movable(Square t) {
-        return super.movable(t);
-    }  
+        return super.movable(t) && (basicMove(t) || castling(t));
+    }
+    
+    /** King regular one pace move check */
+    private boolean basicMove(Square t) {
+        return Math.abs(getX() - t.getX()) < 2 
+                && Math.abs(getY() - t.getY()) < 2;
+    }
+    
+    /** King castling */
+    private boolean castling(Square t) {
+        return false;
+    }
 }

@@ -13,11 +13,11 @@
 .path {
     /* -fx-accent: #0093ff;*/
     /* -fx-focus-color: #0093ff; */
-    -fx-border-color: #0093ff;
+    -fx-border-color: red;
     -fx-border-width: 1.5px;
 }
 
 .default-border {
     -fx-border-width: 1.5px;
-    -fx-border-color: black;
+    -fx-border-color: rgb(100, 93, 93);
 }

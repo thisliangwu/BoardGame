@@ -9,11 +9,14 @@ import javafx.stage.Stage;
  * @author Liang Wu
  * @version 2018
  */
-public class BoardGameGUI extends Application {
+public class StartGame extends Application {
     
     @Override
     public void start(Stage stage) {
-        BoardGame boardGame = new ChessGame(new Player(null, Sides.WHITE),new Player(null, Sides.BLACK));
+        BoardGame boardGame = new ChessGame(
+                new Player(null, Sides.WHITE),
+                new Player(null, Sides.BLACK));
+        
         Board board = new Board(boardGame);
         boardGame.setBoard();
         
@@ -45,6 +48,11 @@ class Board extends GridPane {
     private static Square[][] sqrs;
 //    private Square[][] sqrs;
     
+    /** Get the Square at the specified Coordinates. */
+    static Square getSquare(int hIdx, int vIdex) {
+        return (sqrs == null) ?  null :sqrs[hIdx][vIdex];
+    }
+    
     /** Initialize the board.
      * @param boardGame
      *          current chess game
@@ -62,17 +70,5 @@ class Board extends GridPane {
             }
         }
     }
-    
-    /** Get the Square at the specified Coordinates. */
-    static Square getSquare(int x, int y) {
-        return sqrs[x][y];
-    }
-    
-//     /**
-//      * Get the Squares layout.
-//      * @return 2 dimension Square arrays
-//      */
-//     Square[][] getSquares() {
-//         return sqrs;
-//     }
+
 }

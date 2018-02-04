@@ -11,9 +11,9 @@ import javafx.scene.image.ImageView;
  */
 class Square extends Button {
     /**Square size. */
-    public static final int SQRSIZE = 100;
+    static final int SQRSIZE = 100;
     /** Piece that is now on this Square. */
-    private Piece p;
+    private Piece pc;
     /** X coordinate of this Square. */
     private int x;
     /** Y coordinate of this Square. */
@@ -21,14 +21,14 @@ class Square extends Button {
     
     /** Initialize a 8 * 8 Square with different color and 
      * empty Piece information.
-     * @param X
+     * @param horIndex
      *          horizontal coordinate of this Square
-     * @param Y
+     * @param verIndex
      *          vertical coordinate of this Square
      */
-    Square(int X, int Y) {
-        x = X;
-        y = Y;
+    Square(int horIndex, int verIndex) {
+        x = horIndex;
+        y = verIndex;
         if ((x + y) % 2 == 0) {
             toggleOn("grey-square");
             toggleOn("default-border");
@@ -42,56 +42,44 @@ class Square extends Button {
     }
     
     /** Add the specified css class to the Square. */
-    final void toggleOn(String s) {    
-        getStyleClass().add(s);
+    final void toggleOn(String cssClass) {    
+        getStyleClass().add(cssClass);
     }
     
     /** Remove the specified css class from the Square. */
-    final void toggleOff(String s) {
-        getStyleClass().removeAll(s);
+    final void toggleOff(String cssClass) {
+        getStyleClass().removeAll(cssClass);
     }
     
     
-    /** Piece getter.
-     * @return the Piece on this Square.
-     */
+    /** @return the Piece on this Square. */
     Piece getPiece() {
-        return p;
+        return pc;
     }
     
-    /** Set the targeted Piece to this Square.
-     * @param P
-     *          the target Piece 
-     * */
-    void setPiece(Piece P) {
-        p = P;
-        setSquareStyle(P);
+    /** Set the targeted Piece to this Square. */
+    void setPiece(Piece piece) {
+        pc = piece;
+        setSquareStyle(piece);
     }
     
-    /** Change the style of the Square to display the color
-     * and Piece information on this Square.
-     * @param P
-     *          the Piece that is on this Square
-     */
-    private void setSquareStyle(Piece P) {
-        if (P == null) {
+    /** Show the image of the provided Piece on this Square. */
+    private void setSquareStyle(Piece piece) {
+        if (piece == null) {
             setGraphic(null);
         }  else {
-            Image img = new Image(this.getClass().getResourceAsStream("piece-img\\" + P.getImgSrc()));
+            Image img = new Image(this.getClass().getResourceAsStream("piece-img\\" 
+                    + piece.getPlayer().getSide() + "-" + pc.getPieceType() + ".png"));
             setGraphic(new ImageView(img));
         }
     }
     
-    /** horizontal index coordinate of this Square.
-     * @return horizontal index of this Square as an int
-     */
+    /** @return horizontal index of this Square as an int*/
     int getX() {
         return x;
     }
     
-    /** vertical index coordinate of this Square.
-     * @return vertical index coordinate of this Square.
-     */
+    /** @return vertical index coordinate of this Square.*/
     int getY() {
         return y;
     }

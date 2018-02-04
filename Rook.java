@@ -12,11 +12,48 @@ class Rook extends Piece {
      */
     Rook(Player player, int x, int y) {
         super(Pieces.ROOK, player, x, y);
-        setImgSrc(player.getSide() == Sides.WHITE ? "wr.png" : "br.png");
     }
 
     @Override
     boolean movable(Square t) {
-        return super.movable(t);
+        return super.movable(t) && (hMove(t) || vMove(t));
     }  
+    
+    /** Check if this Piece is in the same horizontal line with the target
+     * and there is no obstacle between them.
+     * @param t
+     *          target Square 
+     * @return true or false this move can be done.
+     */
+    private boolean hMove(Square t) {
+        if (getY() == t.getY()) {
+            int min = getX() < t.getX() ? getX() : t.getX();
+            int max = getX() < t.getX() ? t.getX() : getX();
+            for (++min; min < max; min++) {
+                if (Board.getSquare(min, getY()).getPiece() != null)
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    /** Check if this Piece is in the same vertical line with the target
+     * and there is no obstacle between them.
+     * @param t
+     *          target Square 
+     * @return true or false this move can be done.
+     */
+    private boolean vMove(Square t) {
+        if (getX() == t.getX()) {
+            int min = getY() < t.getY() ? getY() : t.getY();
+            int max = getY() < t.getY() ? t.getY() : getY();
+            for (++min; min < max; min++) {
+                if (Board.getSquare(getX(), min).getPiece() != null)
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

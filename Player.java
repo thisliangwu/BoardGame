@@ -1,11 +1,10 @@
 /** two side of a chess game. */
 enum Sides {
-    //WHITE is the first move Player
     WHITE, BLACK;
 }
 
 /** Board game Player information. */
-public class Player {
+class Player {
     /** Name of the Player. */
     private final String name;
     /** white / black side. */

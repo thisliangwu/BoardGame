@@ -1,8 +1,7 @@
  /** Chess Game records Players information and the current Player.
-  * The Chess Game also include isClearPath method to check the 
-  * general move rule.
+  * The chess Game class also initialize all Pieces on the Board.
   */
-public class ChessGame extends BoardGame {
+class ChessGame extends BoardGame {
     /** Chess board size. */
     static final int BOARDSIZE = 8;
     /**Initialize a new Chess Game. 
@@ -41,51 +40,30 @@ public class ChessGame extends BoardGame {
         Board.getSquare(7, kingLine).setPiece(new Rook(p, 7, kingLine));
         Board.getSquare(6, kingLine).setPiece(new Knight(p, 6, kingLine));
         Board.getSquare(5, kingLine).setPiece(new Bishop(p, 5, kingLine));
-    } 
-
-    /** Check the board if the path between two Square are clear. 
-     * Clear means that there is no obstacle (other Piece) in the moving
-     * path.
-     * @param m
-     *          the Square where the Piece is now at
-     * @param t
-     *          the targeted Square to move the Piece into
-     * @return true or false if the path is clear
-     */
+    }  
+    
     @Override
-    boolean isClearPath(Square m, Square t) {
-        switch (m.getPiece().getPieceCode()) {
-        case PAWN : return pawnMove(m, t);
-        default : return false;
-        }    
-    } 
+    void endTurn(Square selected, Square target) {
+        isPawnFirstMove(selected);
+        try {
+            if (target.getPiece().getPieceType() == Pieces.KING)
+                System.out.println("GAME OVER");
+                
+        } catch (Exception ex) {}
+        
+        super.endTurn(selected, target);
+    }
     
     /**
-     * Pawn basic move check.
-     * @param m
-     *          the Square that the selected Piece is on
-     * @param t
-     *          the Square that the selected move to
-     * @return true or false if this Piece can move to the target Square.
+     * Check if it is the first move of Pawn. If true record the current 
+     * Player turn to the Pawn for enpassant move calculation.
+     * @param selected
+     *              potential PAWN first move
      */
-    private boolean pawnMove(Square m, Square t) {
-        Piece p = m.getPiece();
-        if(p.getPlayer().getSide() == Sides.WHITE) {
-            if (t.getPiece() != null && p.getY() + 1 == t.getY()) 
-                return false; //if Piece is blocked
-            if (p.getSteps() == 0) { //pawn first move can take 1 / 2 steps
-                return p.getX() == t.getX() && (t.getY() - p.getY() == 2 || t.getY() - p.getY() == 1);
-            } else { //regular one step forward
-                return p.getX() == t.getX() && t.getY() - p.getY() == 1;
-            }
-        } else {
-            if (t.getPiece() != null && p.getY() - 1 == t.getY())
-                return false;
-            if (p.getSteps() == 0) {
-                return p.getX() == t.getX() && (t.getY() - p.getY() == -2 || t.getY() - p.getY() == -1);
-            } else {
-                return p.getX() == t.getX() && t.getY() - p.getY() == -1;
-            }
+    private void isPawnFirstMove(Square selected) {
+        Piece piece = selected.getPiece();
+        if (piece.getPieceType() == Pieces.PAWN && piece.getSteps() == 0) {
+            ((Pawn) piece).setMoveTurn(piece.getPlayer().getTurn());
         }
     }
 }

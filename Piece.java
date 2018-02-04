@@ -18,9 +18,7 @@ abstract class Piece {
     /** The horizontal index of this Piece on the Board. */
     private int y;
     /** The name of this Piece. */
-    private Pieces pCode;
-    /** Image name of this piece. */
-    private String img;
+    private Pieces piece;
     /** Piece move steps. */
     private int steps;
     
@@ -30,23 +28,23 @@ abstract class Piece {
      *          The name of this Piece
      * @param p
      *          The player that this Piece belongs to
-     * @param X
+     * @param horIdx
      *          The horizontal index of this Piece on the Board
-     * @param Y
+     * @param verIdx
      *          The vertical index of this Piece on the Board
      */
-    Piece(Pieces n, Player p, int X, int Y) {
-        pCode = n;
+    Piece(Pieces n, Player p, int horIdx, int verIdx) {
+        piece = n;
         player = p;
-        x = X;
-        y = Y;
+        x = horIdx;
+        y = verIdx;
     }
     
     /** Piece name getter.
      * @return The name of this piece.
      */
-   public final Pieces getPieceCode() {
-        return pCode;
+   public final Pieces getPieceType() {
+        return piece;
     }
     
     /** Player name getter.
@@ -74,14 +72,14 @@ abstract class Piece {
     
     /**
      * Move this Piece to the specified position.
-     * @param X
+     * @param horzIdx
      *          horizontal index in the Board
-     * @param Y
+     * @param vertIdx
      *          vertical index in the board
      */
-    final void moveTo(int X, int Y) {
-        x = X;
-        y = Y;
+    final void moveTo(int horzIdx, int vertIdx) {
+        x = horzIdx;
+        y = vertIdx;
         steps++;
     }
     
@@ -93,21 +91,18 @@ abstract class Piece {
         return steps;
     }
     
-    /**
-     * Set the name of this Piece image.
-     * @param s
-     *          of the image
+    /** Support method for highlight potential target Squares that this
+     * Piece can be move.
+     * This method is to deal with special case: Like PAWN perform 
+     * en passant move and kill the other Piece when program try to highlight 
+     * potential Targets.
+     * 
+     * @param target
+     *          potential target Square
+     * @return true or false this Piece can move to the target
      */
-    final void setImgSrc(String s) {
-        img = s;
-    }
-    
-    /**
-     * Return the name of this Piece image.
-     * @return the name as String
-     */
-    final String getImgSrc() {
-        return img;
+    boolean targetable(Square target) {
+        return movable(target);
     }
     
     /** This movable only validate if the target and the selected piece 
@@ -117,11 +112,11 @@ abstract class Piece {
      * Using the target Square's getX and getY along with this Piece's getX and 
      * getY to perform calculation.
      * 
-     * @param t
+     * @param target
      *          target Square that this Piece trying to move to
      * @return true or false if this piece can move to the target Square
      */
-    boolean movable(Square t) {
-        return t.getPiece() == null || getPlayer() != t.getPiece().getPlayer();
+    boolean movable(Square target) {
+        return target.getPiece() == null || getPlayer() != target.getPiece().getPlayer();
     };
 }
