@@ -45,15 +45,17 @@ class ChessGame extends BoardGame {
     @Override
     void endTurn(Square selected, Square target) {
         pawnFirstMove(selected);
-//        kingCastling(selected, target);
+        kingCastling(selected, target);
         pawnEnpassant(selected, target);
-        try {
-            if (target.getPiece().getPieceType() == Pieces.KING)
-                System.out.println("GAME OVER");
-                
+        try {//KING die game over
+            if (target.getPiece().getPieceType() == Pieces.KING) {
+                super.endTurn(selected, target);
+                StartGame.gameOver("GAME OVER");
+            }   
         } catch (Exception ex) {}
-        
-        super.endTurn(selected, target);
+        try {
+            super.endTurn(selected, target);
+        } catch (Exception ex) {}
     }
     
     /**
@@ -71,18 +73,20 @@ class ChessGame extends BoardGame {
     
     /**Perform pawn enpassant.  */
     private void pawnEnpassant(Square s, Square t) {
-        
+        Piece m = s.getPiece();
+        if (m.getPieceType() == Pieces.PAWN && ((Pawn) m).enPassant(t))
+            Board.getSquare(t.getX(), s.getY()).setPiece(null);
     }
     
     /**Perform king castling. */
     private void kingCastling(Square s, Square t) {
         int l = t.getX() - 1, r = t.getX() + 1, y = t.getY();
         if (s.getPiece().getPieceType() == Pieces.KING) {
-            if (((King) s.getPiece()).leftCastling(t)) {
+            if (t.getX() < s.getX() &&((King) s.getPiece()).leftCastling(t)) { //left castling
                 Board.getSquare(r, y).setPiece(Board.getSquare(l, y).getPiece());
                 Board.getSquare(l, y).setPiece(null);
             }
-            if (((King) s.getPiece()).rightCastling(t)) {
+            if (t.getX() > s.getX() && ((King) s.getPiece()).rightCastling(t)) { //right castling
                 Board.getSquare(l, y).setPiece(Board.getSquare(r, y).getPiece());
                 Board.getSquare(r, y).setPiece(null);
             }

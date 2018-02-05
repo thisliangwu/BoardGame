@@ -47,7 +47,7 @@ abstract class BoardGame {
         ArrayList<Square> list = new ArrayList<>();
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (m.getPiece().targetable(Board.getSquare(i, j)))
+                if (m.getPiece().movable(Board.getSquare(i, j)))
                     list.add(Board.getSquare(i, j));
             }
         }
