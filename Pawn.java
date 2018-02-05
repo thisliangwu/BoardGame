@@ -21,12 +21,6 @@ class Pawn extends Piece {
         return res && (basicMove(t) || enDiagonal(t) || enPassant(t));
     }
     
-    @Override
-    boolean targetable(Square t) {
-        boolean res = super.movable(t);
-        return res && (basicMove(t) || enDiagonal(t) || potentialEnPassant(t));
-    }
-    
     /** Record the turn when the Pawn first move for enpassant move checking. */
     void setMoveTurn(int i) {
         moveTurn = i;
@@ -48,10 +42,10 @@ class Pawn extends Piece {
      */
     private boolean enDiagonal(Square t) {
         if (t.getPiece() != null && getPlayer().getSide() == Sides.WHITE) {
-            return (getX() == t.getX() + 1 || getX() == t.getX() - 1) && getY() == t.getY() - 1;
+            return Math.abs(getX() - t.getX()) == 1 && getY() == t.getY() - 1;
         } //white Piece -> this (1, 1) target(0, 2) / (2, 2)
         if (t.getPiece() != null && getPlayer().getSide() == Sides.BLACK) {
-            return (getX() == t.getX() + 1 || getX() == t.getX() - 1) && getY() == t.getY() + 1;
+            return Math.abs(getX() - t.getX()) == 1 && getY() == t.getY() + 1;
         }//black Piece -> this(1, 1) target (0, 0) / (2, 0)
         return false;
     }
@@ -61,54 +55,19 @@ class Pawn extends Piece {
      *          The Square of the potential target
      * @return true or false if it is valid move
      */
-    private boolean enPassant(Square t) {
-        if (getPlayer().getSide() == Sides.WHITE) { 
-            if (getX() != 0 && sidePawnCheck(getX() - 1, getY())) { // left target
-                boolean res = t.getX() + 1 == getX() && t.getY() - 1 == getY(); //prevent random click
-                if (res) //kill the En Passant PAWN
-                    Board.getSquare(getX() - 1, getY()).setPiece(null);
-                return res;
-            }
-            if (getX() != ChessGame.BOARDSIZE -1 && sidePawnCheck(getX() + 1, getY())) { // right target
-                boolean res = t.getX() - 1 == getX() && t.getY() - 1 == getY();
-                if (res)
-                    Board.getSquare(getX() + 1, getY()).setPiece(null);
-                return res;
-            }
-        } else { //BLACK SIDE
-            if (getX() != 0 && sidePawnCheck(getX() - 1, getY())) { //left target
-                boolean res = t.getX() + 1 == getX() && t.getY() + 1 == getY();
-                if (res) //kill the En Passant PAWN
-                    Board.getSquare(getX() - 1, getY()).setPiece(null);
-                return res;
-            }
-            if (getX() != ChessGame.BOARDSIZE -1 && sidePawnCheck(getX() + 1, getY())) { //right target
-                boolean res = t.getX() - 1 == getX() && t.getY() + 1 == getY();
-                if (res)
-                    Board.getSquare(getX() + 1, getY()).setPiece(null);
-                return res;
-            }
-        }
-        return false;
-    }
-    
-    /** Duplicate with enPssant method except set the other Piece to NULL. */
-    private boolean potentialEnPassant(Square t) {
-        if (getPlayer().getSide() == Sides.WHITE) { 
-            if (getX() != 0 && sidePawnCheck(getX() - 1, getY())) { // left target
+    boolean enPassant(Square t) {
+        try {// two side pawn highlight check results arrayoutofbound exception.
+        if (getPlayer().getSide() == Sides.WHITE) {
+            if (sidePawnCheck(getX() - 1, getY())) // left target
                 return t.getX() + 1 == getX() && t.getY() - 1 == getY(); //prevent random click
-            }
-            if (getX() != ChessGame.BOARDSIZE -1 && sidePawnCheck(getX() + 1, getY())) { // right target
+            if (sidePawnCheck(getX() + 1, getY())) // right target
                 return t.getX() - 1 == getX() && t.getY() - 1 == getY();
-            }
         } else { //BLACK SIDE
-            if (getX() != 0 && sidePawnCheck(getX() - 1, getY())) { //left target
-               return t.getX() + 1 == getX() && t.getY() + 1 == getY();
-            }
-            if (getX() != ChessGame.BOARDSIZE -1 && sidePawnCheck(getX() + 1, getY())) { //right target
+            if (sidePawnCheck(getX() - 1, getY())) //left target
+                return t.getX() + 1 == getX() && t.getY() + 1 == getY();
+            if (sidePawnCheck(getX() + 1, getY()))  //right target
                 return t.getX() - 1 == getX() && t.getY() + 1 == getY();
-            }
-        }
+        }}catch (Exception ex) {}
         return false;
     }
     
@@ -147,18 +106,18 @@ class Pawn extends Piece {
         if (getPlayer().getSide() == Sides.WHITE) {
             if (getSteps() == 0)  //firt move 
                 return getX() == t.getX()
-                        && ((t.getY() - getY() == 2  // take two steps
-                            && Board.getSquare(getX(), getY() + 1).getPiece() == null)
-                        || t.getY() - getY() == 1); // one step
+                  && ((t.getY() - getY() == 2  // take two steps
+/* block at 1 step*/ && Board.getSquare(getX(), getY() + 1).getPiece() == null)
+                  || t.getY() - getY() == 1); // one step
              else  //regular one step forward
                 return getX() == t.getX() && t.getY() - getY() == 1;
             
         } else { //BLACK SIDE
             if (getSteps() == 0) {
                 return getX() == t.getX()
-                        && ((getY() - t.getY() == 2 
-                                && Board.getSquare(getX(), getY() - 1).getPiece() == null)
-                        || getY() - t.getY() == 1);
+                    && ((getY() - t.getY() == 2 
+                      && Board.getSquare(getX(), getY() - 1).getPiece() == null)
+                    || getY() - t.getY() == 1);
             } else {
                 return getX() == t.getX() && t.getY() - getY() == -1;
             }

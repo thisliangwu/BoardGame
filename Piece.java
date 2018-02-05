@@ -91,20 +91,6 @@ abstract class Piece {
         return steps;
     }
     
-    /** Support method for highlight potential target Squares that this
-     * Piece can be move.
-     * This method is to deal with special case: Like PAWN perform 
-     * en passant move and kill the other Piece when program try to highlight 
-     * potential Targets.
-     * 
-     * @param target
-     *          potential target Square
-     * @return true or false this Piece can move to the target
-     */
-    boolean targetable(Square target) {
-        return movable(target);
-    }
-    
     /** This movable only validate if the target and the selected piece 
      * are belong to different Players.
      * Subclass should override this movable method and also call super.movable

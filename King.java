@@ -16,9 +16,7 @@ class King extends Piece {
     
     @Override
     boolean movable(Square t) {
-        return (super.movable(t) && basicMove(t)) 
-//                || castling(t)
-                ;
+        return (super.movable(t) && basicMove(t)) || castling(t);
     }
     
     /** King regular one pace move check */

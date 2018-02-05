@@ -1,6 +1,8 @@
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
@@ -10,6 +12,11 @@ import javafx.stage.Stage;
  * @version 2018
  */
 public class StartGame extends Application {
+    static void gameOver(String s) {
+        Alert go = new Alert(AlertType.CONFIRMATION);
+        go.setHeaderText(s);
+        go.showAndWait();
+    }
     
     @Override
     public void start(Stage stage) {
