@@ -1,10 +1,11 @@
 import javafx.event.EventHandler;
+import java.io.Serializable;
 import javafx.event.ActionEvent;
 
 /** The ClickHandler highlights the selected Square and validates
  * the move of Pieces.
  */
-class ClickHandler implements EventHandler<ActionEvent> {
+class ClickHandler implements EventHandler<ActionEvent>, Serializable {
     /** Selected Piece to perform a move. */
     private static Square selected;
     /** Potential target Squares that the selected Piece will move to. */

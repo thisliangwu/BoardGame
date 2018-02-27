@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /** Two PlayerBoard Game abstract class.
@@ -6,7 +7,7 @@ import java.util.ArrayList;
  * the Pieces on the board, and override isClearPath method
  * to set up general board rules.
  */
-abstract class BoardGame {
+abstract class BoardGame implements Serializable {
     /** Board game size. */
     private int boardSize;
     /**two players. */

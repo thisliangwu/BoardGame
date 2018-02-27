@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.Serializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,7 +11,7 @@ import javafx.scene.image.ImageView;
  * in the Board class, which are used by the isClearPath method in the
  * Board class.
  */
-class Square extends Button {
+class Square extends Button implements Serializable{
     /**Square size. */
     static final int SQRSIZE = 100;
     /** Piece that is now on this Square. */
@@ -68,7 +70,7 @@ class Square extends Button {
         if (piece == null) {
             setGraphic(null);
         }  else {
-            Image img = new Image(this.getClass().getResourceAsStream("piece-img\\" 
+            Image img = new Image(this.getClass().getResourceAsStream("piece-img" + File.separator
                     + piece.getPlayer().getSide() + "-" + pc.getPieceType() + ".png"));
             setGraphic(new ImageView(img));
         }

@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /** Board game Pieces. */
 enum Pieces {
     PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING
@@ -10,7 +12,7 @@ enum Pieces {
  * Subclass should override this movable method and also call super.movable
  * method to calculate if this Piece can be moved to the target Square.
  */
-abstract class Piece {
+abstract class Piece implements Serializable {
     /** The player that this Piece belongs to. */
     private Player player;
     /** The vertical index of this Piece on the Board. */

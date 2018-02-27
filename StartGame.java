@@ -1,5 +1,13 @@
+import javafx.scene.control.Button;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,6 +20,7 @@ import javafx.stage.Stage;
  * @version 2018
  */
 public class StartGame extends Application {
+    Board board;
     static void gameOver(String s) {
         Alert go = new Alert(AlertType.CONFIRMATION);
         go.setHeaderText(s);
@@ -24,13 +33,11 @@ public class StartGame extends Application {
                 new Player(null, Sides.WHITE),
                 new Player(null, Sides.BLACK));
         
-        Board board = new Board(boardGame);
+        board = new Board(boardGame);
         boardGame.setBoard();
-        
-        FlowPane root = new FlowPane(board);
-        
-        int sceneSize = boardGame.getBoardSize() * Square.SQRSIZE;
-        Scene scene = new Scene(root, sceneSize, sceneSize);
+        Menu menu = new Menu();
+        FlowPane root = new FlowPane(menu, board);
+        Scene scene = new Scene(root);
         
         stage.setTitle(boardGame.getClass().getSimpleName());
         stage.setScene(scene);
@@ -44,13 +51,45 @@ public class StartGame extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    class Menu extends HBox {
+        Menu() {
+            Button save = new Button("Save");
+            save.setOnAction((e) -> {
+                try {
+                    FileOutputStream fo = new FileOutputStream("test.gam");
+                    ObjectOutputStream oo = new ObjectOutputStream(fo);
+                    oo.writeObject(board);
+                    oo.close();
+                    fo.close();
+                } catch(IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            Button resume = new Button("Load");
+            resume.setOnAction((e) -> {
+                try {
+                    FileInputStream fi = new FileInputStream("test.gam");
+                    ObjectInputStream oi = new ObjectInputStream(fi);
+                    board = (Board) oi.readObject();
+                    oi.close();
+                    fi.close(); 
+                } catch(ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch(IOException ex)  {
+                    ex.printStackTrace();
+                }
+            });
+            getChildren().addAll(save, resume);
+        }
+    }
 }
 
 
 /** The Board Grid layout store a 2 dimension array to keep track of the
  * coordinate of each Square.
  */
-class Board extends GridPane {
+class Board extends GridPane implements Serializable {
     /**Square array to track the position of different Squares.*/
     private static Square[][] sqrs;
 //    private Square[][] sqrs;

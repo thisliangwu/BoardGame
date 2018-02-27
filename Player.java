@@ -1,10 +1,12 @@
+import java.io.Serializable;
+
 /** two side of a chess game. */
 enum Sides {
     WHITE, BLACK;
 }
 
 /** Board game Player information. */
-class Player {
+class Player implements Serializable {
     /** Name of the Player. */
     private final String name;
     /** white / black side. */
