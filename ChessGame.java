@@ -30,16 +30,16 @@ class ChessGame extends BoardGame {
         int kingLine = p.getSide() == Sides.WHITE ? 0 : BOARDSIZE - 1;
         
         for (int i = 0; i < BOARDSIZE; i++) {
-            Board.getSquare(i, pawnLine).setPiece(new Pawn(p, i, pawnLine));
+        	board[i][pawnLine] = new Pawn(p, i, pawnLine);
         }
-        Board.getSquare(0, kingLine).setPiece(new Rook(p, 0, kingLine));
-        Board.getSquare(1, kingLine).setPiece(new Knight(p, 1, kingLine));
-        Board.getSquare(2, kingLine).setPiece(new Bishop(p, 2, kingLine));
-        Board.getSquare(3, kingLine).setPiece(new King(p, 3, kingLine));
-        Board.getSquare(4, kingLine).setPiece(new Queen(p, 4, kingLine));
-        Board.getSquare(7, kingLine).setPiece(new Rook(p, 7, kingLine));
-        Board.getSquare(6, kingLine).setPiece(new Knight(p, 6, kingLine));
-        Board.getSquare(5, kingLine).setPiece(new Bishop(p, 5, kingLine));
+        board[0][kingLine] = new Rook(p, 0, kingLine);
+        board[1][kingLine] = new Knight(p, 1, kingLine);
+		board[2][kingLine] = new Bishop(p, 2, kingLine);
+		board[3][kingLine] = new King(p, 3, kingLine);
+		board[4][kingLine] = new Queen(p, 4, kingLine);
+		board[5][kingLine] = new Bishop(p, 5, kingLine);
+		board[6][kingLine] = new Knight(p, 6, kingLine);
+		board[7][kingLine] = new Rook(p, 7, kingLine);
     }  
     
     @Override

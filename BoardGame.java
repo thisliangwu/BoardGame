@@ -14,8 +14,8 @@ abstract class BoardGame implements Serializable {
     private Player white, black;
     /** Current turn player. */
     private Player crp;
-//    /** Game board. */
-//    protected Board board;
+    /** data member used to memorize Piece information when saving board game. */
+    Piece[][] board;
     
     /**
      * Initialize the Board game information.
@@ -31,10 +31,12 @@ abstract class BoardGame implements Serializable {
         black = player2;
         crp = white;
         boardSize = boardsize;
+        board = new Piece[boardsize][boardsize];
+        setBoard();
     }
     
-    /** Child class need to override this method set up the Pieces
-     * on the board with Baord.getSquare method.
+    /** Child class need to override this method to set up the Pieces
+     * on the board array.
      */
     abstract void setBoard();
     

@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,7 +19,17 @@ import javafx.stage.Stage;
  * @version 2018
  */
 public class StartGame extends Application {
-    Board board;
+	/** current playing board game. */
+    private BoardGame boardGame;
+    /** GUI root. */
+    private FlowPane root;
+    /** Application stage. */
+    private Stage stage;
+    
+    /** Game Over display. 
+     * @param s
+     * 			the message to be displayed
+     */
     static void gameOver(String s) {
         Alert go = new Alert(AlertType.CONFIRMATION);
         go.setHeaderText(s);
@@ -29,17 +38,13 @@ public class StartGame extends Application {
     
     @Override
     public void start(Stage stage) {
-        BoardGame boardGame = new ChessGame(
-                new Player(null, Sides.WHITE),
-                new Player(null, Sides.BLACK));
-        
-        board = new Board(boardGame);
-        boardGame.setBoard();
         Menu menu = new Menu();
-        FlowPane root = new FlowPane(menu, board);
+        root = new FlowPane(menu);
         Scene scene = new Scene(root);
+        this.stage = stage;
         
-        stage.setTitle(boardGame.getClass().getSimpleName());
+        stage.setY(10);
+        stage.setTitle("Board Game");
         stage.setScene(scene);
         stage.show();
     }
@@ -52,26 +57,42 @@ public class StartGame extends Application {
         launch(args);
     }
 
+    /** Menu bar. */
     class Menu extends HBox {
+    	/** Construct Menu bar.  */
         Menu() {
+        	Button chess = new Button("New Chess");
+        	chess.setOnAction((e) ->{
+        		boardGame = new ChessGame(
+                        new Player(null, Sides.WHITE),
+                        new Player(null, Sides.BLACK));
+        		buidBoard(boardGame);
+        	});
+        	
+        	//save menu
             Button save = new Button("Save");
             save.setOnAction((e) -> {
+            	for (int i = 0; i < boardGame.getBoardSize(); i++) 
+                    for (int j = 0; j < boardGame.getBoardSize(); j++) 
+                    	boardGame.board[i][j] = Board.getSquare(i, j).getPiece();
+               
                 try {
                     FileOutputStream fo = new FileOutputStream("test.gam");
                     ObjectOutputStream oo = new ObjectOutputStream(fo);
-                    oo.writeObject(board);
+                    oo.writeObject(boardGame);
                     oo.close();
                     fo.close();
                 } catch(IOException ex) {
                     ex.printStackTrace();
                 }
             });
+            //Resume menu
             Button resume = new Button("Load");
             resume.setOnAction((e) -> {
                 try {
                     FileInputStream fi = new FileInputStream("test.gam");
                     ObjectInputStream oi = new ObjectInputStream(fi);
-                    board = (Board) oi.readObject();
+                    boardGame = (BoardGame) oi.readObject();
                     oi.close();
                     fi.close(); 
                 } catch(ClassNotFoundException ex) {
@@ -79,8 +100,23 @@ public class StartGame extends Application {
                 } catch(IOException ex)  {
                     ex.printStackTrace();
                 }
+                buidBoard(boardGame);
             });
-            getChildren().addAll(save, resume);
+            getChildren().addAll(chess, save, resume);
+        }
+        
+        /** Build the GUI board based on the boardGame information.
+         * using the BoardGame.board information.
+         * @param bg
+         * 			the BoardGame object used to build or rebuild the Board GUI
+         */
+        void buidBoard(BoardGame bg) {
+    		try {
+    			root.getChildren().remove(1);
+    		} catch(IndexOutOfBoundsException ex) {}	
+    		
+    		root.getChildren().add(new Board(bg));
+    		stage.sizeToScene();
         }
     }
 }
@@ -89,10 +125,9 @@ public class StartGame extends Application {
 /** The Board Grid layout store a 2 dimension array to keep track of the
  * coordinate of each Square.
  */
-class Board extends GridPane implements Serializable {
+class Board extends GridPane {
     /**Square array to track the position of different Squares.*/
     private static Square[][] sqrs;
-//    private Square[][] sqrs;
     
     /** Get the Square at the specified Coordinates. */
     static Square getSquare(int hIdx, int vIdex) {
@@ -110,6 +145,7 @@ class Board extends GridPane implements Serializable {
         for (int i = 0; i < boardGame.getBoardSize(); i++) {
             for (int j = 0; j < boardGame.getBoardSize(); j++) {
                 Square s = new Square(i, j);
+                s.setPiece(boardGame.board[i][j]);
                 s.setOnAction(new ClickHandler(boardGame));
                 sqrs[i][j] = s; //add Square to the array
                 add(s, i, j); //add Square button to GridPane
