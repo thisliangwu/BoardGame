@@ -4,9 +4,9 @@ import javafx.event.ActionEvent;
 /** The ClickHandler highlights the selected Square and validates
  * the move of Pieces.
  */
-class ClickHandler implements EventHandler<ActionEvent> {
+public class MoveHandler implements EventHandler<ActionEvent> {
     /** Selected Piece to perform a move. */
-    private static Square selected;
+    private static UISquare selected;
     /** Potential target Squares that the selected Piece will move to. */
     private static Square[] targets;
     /** Current board game. */
@@ -16,35 +16,39 @@ class ClickHandler implements EventHandler<ActionEvent> {
      * @param bg
      *          the current board game
      */
-    ClickHandler(BoardGame bg) {
+    public MoveHandler(BoardGame bg) {
         boardGame = bg;
     }
     
     @Override
     public void handle(ActionEvent e) {
-        Square click = (Square) e.getSource();
+        UISquare click = (UISquare) e.getSource();
         if (selected == null) {
             try {
-            if (boardGame.isInTurn(click.getPiece().getPlayer())) {
+            if (boardGame.isInTurn(click.square.getPiece().player)) {
                     selected = click;
                     pathOn();
-            }} catch(Exception ex){}
+            }} catch(NullPointerException ex){}
             
         } else { //try to move the selected Piece
             if (selected == click) { //double click the Piece to cancel select.
                 pathOff();
                 return;
             } //change selected Piece to move
-            if (click.getPiece() != null && selected.getPiece().getPlayer() 
-                    == click.getPiece().getPlayer()) {
+            if (click.square.getPiece() != null && selected.square.getPiece().player 
+                    == click.square.getPiece().player) {
                 pathOff(); 
                 selected = click;
                 pathOn();
                 return;
             }
-            if (selected.getPiece().movable(click)) {
-                //perform the move and end the turn
-                boardGame.endTurn(selected, click); 
+            if (selected.square.getPiece().movable(click.square)) {
+                //end the turn
+                boardGame.endTurn(selected.square, click.square);
+                
+                //perform UI moving
+                selected.putPiece(selected.square.getPiece());
+                click.putPiece(click.square.getPiece());
                 pathOff();
             }    
         }
@@ -53,10 +57,11 @@ class ClickHandler implements EventHandler<ActionEvent> {
     /** Highlight Selected Square and potential targets. */
     private void pathOn() {
         selected.toggleOn("selected");
-        targets = boardGame.getTargets(selected);
+        targets = boardGame.getTargets(selected.square);
         for (Square t : targets) {
-            t.toggleOff("default-border");
-            t.toggleOn("path");
+        	UISquare target = UIBoard.getSquare(t.X, t.Y);
+            target.toggleOff("default-border");
+            target.toggleOn("path");
         } 
     }
     /**
@@ -66,8 +71,9 @@ class ClickHandler implements EventHandler<ActionEvent> {
         selected.toggleOff("selected");
         selected = null;
         for (Square t : targets) {
-            t.toggleOff("path"); 
-            t.toggleOn("default-border");
+        	UISquare target = UIBoard.getSquare(t.X, t.Y);
+    		target.toggleOff("path"); 
+    		target.toggleOn("default-border");
         }
     }
 }

@@ -1,5 +1,5 @@
 /** Rook Piece in the chess game. */
-class Rook extends Piece {
+public final class Rook extends Piece {
     
     /**
      * Initialize the player and the position of this piece.
@@ -10,12 +10,12 @@ class Rook extends Piece {
      * @param y
      *          The horizontal index of this Piece on the Board
      */
-    Rook(Player player, int x, int y) {
-        super(Pieces.ROOK, player, x, y);
+    public Rook(BoardGame bg, Player player, int x, int y) {
+        super(bg, Pieces.ROOK, player, x, y);
     }
 
     @Override
-    boolean movable(Square t) {
+    protected boolean movable(Square t) {
         return super.movable(t) && (hMove(t) || vMove(t));
     }  
     
@@ -26,16 +26,26 @@ class Rook extends Piece {
      * @return true or false this move can be done.
      */
     private boolean hMove(Square t) {
-        if (getY() == t.getY()) {
-            int min = getX() < t.getX() ? getX() : t.getX();
-            int max = getX() < t.getX() ? t.getX() : getX();
-            for (++min; min < max; min++) {
-                if (Board.getSquare(min, getY()).getPiece() != null)
-                    return false;
-            }
-            return true;
+    	int y = getY();
+    	if(y != t.Y) 
+    		return false;
+    	
+    	int min, max, x = getX(), tx = t.X;
+    	if(x < tx) {
+    		min = x;
+    		max = tx;
+    	} else {
+    		min = tx;
+    		max = x;
+    	}
+
+        for (++min; min < max; min++) {
+        	Piece target = boardGame.board.getBoard()[min][y].getPiece();
+            if (target != null)
+                return false;
         }
-        return false;
+        return true;
+  
     }
     
     /** Check if this Piece is in the same vertical line with the target
@@ -45,15 +55,24 @@ class Rook extends Piece {
      * @return true or false this move can be done.
      */
     private boolean vMove(Square t) {
-        if (getX() == t.getX()) {
-            int min = getY() < t.getY() ? getY() : t.getY();
-            int max = getY() < t.getY() ? t.getY() : getY();
-            for (++min; min < max; min++) {
-                if (Board.getSquare(getX(), min).getPiece() != null)
-                    return false;
-            }
-            return true;
+    	int x = getX();
+    	if(x != t.X)
+    		return false;
+    	
+    	int min, max, y = getY(), ty = t.Y;
+    	if(y < ty) {
+    		min = y;
+    		max = ty;
+    	} else {
+    		min = ty;
+    		max = y;
+    	}
+
+        for (++min; min < max; min++) {
+        	Piece target = boardGame.board.getBoard()[x][min].getPiece();
+            if (target != null)
+                return false;
         }
-        return false;
+        return true;
     }
 }

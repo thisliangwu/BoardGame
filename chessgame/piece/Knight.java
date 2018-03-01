@@ -1,5 +1,5 @@
 /** Knight Piece in the chess game. */
-class Knight extends Piece {
+public final class Knight extends Piece {
     
     /**
      * Initialize the player and the position of this piece.
@@ -10,12 +10,12 @@ class Knight extends Piece {
      * @param y
      *          The horizontal index of this Piece on the Board
      */
-    Knight(Player player, int x, int y) {
-        super(Pieces.KNIGHT, player, x, y);
+    Knight(BoardGame bg, Player player, int x, int y) {
+        super(bg, Pieces.KNIGHT, player, x, y);
     }
 
     @Override
-    boolean movable(Square t) {
+    protected boolean movable(Square t) {
         return super.movable(t) && jumpable(t);
     }  
     
@@ -25,8 +25,8 @@ class Knight extends Piece {
      * @return true or false this move is valid
      */
     private boolean jumpable(Square t) {
-        int xdif = Math.abs(getX() - t.getX());
-        int ydif = Math.abs(getY() - t.getY());
+        int xdif = Math.abs(getX() - t.X);
+        int ydif = Math.abs(getY() - t.Y);
         if (xdif < 3 && ydif < 3)
             return xdif + ydif == 3;
         return false;

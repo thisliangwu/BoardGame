@@ -7,18 +7,20 @@ import java.util.ArrayList;
  * the Pieces on the board, and override isClearPath method
  * to set up general board rules.
  */
-abstract class BoardGame implements Serializable {
-    /** Board game size. */
-    private int boardSize;
+public abstract class BoardGame implements Serializable {
     /**two players. */
-    private Player white, black;
+    public final Player white, black;
+    /** the board this board game uses. */
+    public final Board board;
+    /** board size.  */
+    public final int boardSize;
     /** Current turn player. */
     private Player crp;
-    /** data member used to memorize Piece information when saving board game. */
-    Piece[][] board;
-    
+        
     /**
-     * Initialize the Board game information.
+     * Initialize the Board game information. 
+     * Also Initialize the board using provided board size and override
+     * setBoard() method.
      * @param player1
      *          first move Player
      * @param player2
@@ -26,66 +28,46 @@ abstract class BoardGame implements Serializable {
      * @param boardsize
      *          Board game dimension
      */
-    BoardGame(Player player1, Player player2, int boardsize) {
+    protected BoardGame(Player player1, Player player2, int boardsize) {
         white = player1;
         black = player2;
         crp = white;
         boardSize = boardsize;
-        board = new Piece[boardsize][boardsize];
-        setBoard();
+        board = new Board(boardsize);
+        setBoard(); //setup Pieces in the board.
     }
     
-    /** Child class need to override this method to set up the Pieces
-     * on the board array.
+    /** Child class need to override this method set up the Pieces
+     * on the board with getBoard method.
      */
-    abstract void setBoard();
+    protected abstract void setBoard();
     
     /**
      * Return an array of potential targets for the Piece on this Square.
-     * @param m
+     * @param selected
      *          the Square of the Piece to be moved
      * @return Square list that this Piece can be moved to
      */
-    final Square[] getTargets(Square m) {
+    protected final Square[] getTargets(Piece selected) {
         ArrayList<Square> list = new ArrayList<>();
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                if (m.getPiece().movable(Board.getSquare(i, j)))
-                    list.add(Board.getSquare(i, j));
+        for (int i = 0; i < board.boardSize; i++) {
+            for (int j = 0; j < board.boardSize; j++) {
+                if (selected.movable(board.getBoard()[i][j]))
+                    list.add(board.getBoard()[i][j]);
             }
         }
         return list.toArray(new Square[0]);
     }
     
-    /**
-     * Return the first move player.
-     * @return first move Player
-     */
-    final Player getFirstPlayer() {
-        return white;
-    }
-    
-    /**
-     * Return the second player.
-     * @return second Player.
-     */
-    final Player getSecondPlayer() {
-        return black;
-    }
-    
-    /**
-     * Return the board size of this Chess game.
-     * @return board size as an integer.
-     */
-    final int getBoardSize() {
-        return boardSize;
+    protected final Square[] getTargets(Square selected) {
+    	return getTargets(selected.getPiece());
     }
     
     /** Check if the target player is in turn to move. 
      * @param player target player 
      * @return true or false the target player is in turn to move
      */
-    final boolean isInTurn(Player player) {
+    public final boolean isInTurn(Player player) {
         return crp == player;
     }
     
@@ -98,13 +80,10 @@ abstract class BoardGame implements Serializable {
      * @param target
      *              the target Square that the selected Piece move to
      */
-    void endTurn(Square selected, Square target) {
-        target.setPiece(selected.getPiece()); 
-        //kill the target Piece and move selected Piece to the target
-        selected.getPiece().moveTo(target.getX(), target.getY());
-        selected.setPiece(null);
+    protected void endTurn(Square selected, Square target) { 
+        selected.getPiece().moveTo(target.X, target.Y);
         
-        if (crp == white) {//switch move side
+        if (crp == white) { //switch move side
             white.endTurn();
             crp = black;
         } else {
