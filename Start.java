@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.HBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /** Board Game GUI. Initialize the board game and Board GridPane.
@@ -30,7 +32,10 @@ public class Start extends Application {
         Scene scene = new Scene(root);
 
         this.stage = stage;
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX(primScreenBounds.getWidth() / 4); 
         stage.setY(10);
+        
         stage.setTitle("Board Game");
         stage.setScene(scene);
         stage.show();

@@ -30,7 +30,8 @@ public class UIBoard extends GridPane {
     }
 
     /** Get the Square at the specified Coordinates. */
-    static UISquare getSquare(int hIdx, int vIdex) {
+    public static UISquare getSquare(int hIdx, int vIdex) {
         return (sqrs == null) ?  null : sqrs[hIdx][vIdex];
     }
+    
 }

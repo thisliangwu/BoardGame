@@ -8,6 +8,7 @@ import java.io.Serializable;
  * method to calculate if this Piece can be moved to the target Square.
  */
 public abstract class Piece implements Serializable {
+	/** the current board game. */
 	protected final BoardGame boardGame;
     /** The player that this Piece belongs to. */
 	protected final Player player;

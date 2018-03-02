@@ -23,35 +23,72 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent e) {
         UISquare click = (UISquare) e.getSource();
-        if (selected == null) {
+        
+        //initialize first click move
+        if(boardGame.getCurrentPlayer() == null)
+        	boardGame.setFirstMovePlayer(click.square.getPiece().player);
+        
+        if(selected == null) {
             try {
-            if (boardGame.isInTurn(click.square.getPiece().player)) {
+            if(boardGame.isInTurn(click.square.getPiece().player)) {
                     selected = click;
                     pathOn();
             }} catch(NullPointerException ex){}
             
         } else { //try to move the selected Piece
-            if (selected == click) { //double click the Piece to cancel select.
+            if(selected == click) { //double click the Piece to cancel select.
                 pathOff();
                 return;
             } //change selected Piece to move
-            if (click.square.getPiece() != null && selected.square.getPiece().player 
+            if(click.square.getPiece() != null && selected.square.getPiece().player 
                     == click.square.getPiece().player) {
                 pathOff(); 
                 selected = click;
                 pathOn();
                 return;
             }
-            if (selected.square.getPiece().movable(click.square)) {
+            if(selected.square.getPiece().movable(click.square)) {
                 //end the turn
                 boardGame.endTurn(selected.square, click.square);
                 
                 //perform UI moving
                 selected.putPiece(selected.square.getPiece());
                 click.putPiece(click.square.getPiece());
+                
+                //Special move that the selected Piece does not directly
+                //click on the target Piece.
+                Piece p = click.square.getPiece();
+                if(p instanceof Pawn)
+                	enpassand((Pawn)click.square.getPiece());
+                if(p instanceof King)
+                	castling((King)click.square.getPiece());
                 pathOff();
             }    
         }
+    }
+    
+    /**
+     * Perform special move in the Board UI.
+     * re-render the surrounding Piece in case enpassant 
+     * @param piece
+     * 			target Pawn
+     */
+    private void enpassand(Pawn piece) {
+    	int x = piece.getX(), y = piece.getY();
+    	UIBoard.getSquare(x, y - 1).putPiece(boardGame.board.getBoard()[x][y - 1].getPiece());
+    	UIBoard.getSquare(x, y + 1).putPiece(boardGame.board.getBoard()[x][y + 1].getPiece());
+    }
+    
+    /**
+     * Perform special move in the Board UI.
+     * re-render the surrounding Piece in case enpassant 
+     * @param piece
+     * 			target Pawn
+     */
+    private void castling(King piece) {
+    	int x = piece.getX(), y = piece.getY();
+    	UIBoard.getSquare(x - 1, y).putPiece(boardGame.board.getBoard()[x - 1][y].getPiece());
+    	UIBoard.getSquare(x + 1, y).putPiece(boardGame.board.getBoard()[x + 1][y].getPiece());
     }
     
     /** Highlight Selected Square and potential targets. */

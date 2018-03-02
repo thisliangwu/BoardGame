@@ -18,7 +18,7 @@ public final class Pawn extends Piece {
     @Override
     protected boolean movable(Square t) {
         boolean res = super.movable(t);
-        return res && (basicMove(t) || enDiagonal(t)); // || enPassant(t));
+        return res && (basicMove(t) || enDiagonal(t) || enPassant(t));
     }
     
     /** Record the player turn when the Pawn first move 
@@ -56,48 +56,49 @@ public final class Pawn extends Piece {
     }
     
     /** En passant move.
-//     * @param t
-//     *          The Square of the potential target
-//     * @return true or false if it is valid move
-//     */
-//    boolean enPassant(Square t) {
-//        try {// two side pawn highlight check results arrayoutofbound exception.
-//        if (getPlayer().getSide() == Sides.WHITE) {
-//            if (sidePawnCheck(getX() - 1, getY())) // left target
-//                return t.getX() + 1 == getX() && t.getY() - 1 == getY(); //prevent random click
-//            if (sidePawnCheck(getX() + 1, getY())) // right target
-//                return t.getX() - 1 == getX() && t.getY() - 1 == getY();
-//        } else { //BLACK SIDE
-//            if (sidePawnCheck(getX() - 1, getY())) //left target
-//                return t.getX() + 1 == getX() && t.getY() + 1 == getY();
-//            if (sidePawnCheck(getX() + 1, getY()))  //right target
-//                return t.getX() - 1 == getX() && t.getY() + 1 == getY();
-//        }}catch (Exception ex) {}
-//        return false;
-//    }
-//    
-//    /** check if the Piece on the specified position is a first move Pawn.
-//     * @param x
-//     *          horizontal index
-//     * @param y
-//     *          vertical index
-//     * @return true or false the Piece on this position is a first move Pawn.
-//     */
-//    private boolean sidePawnCheck(int x, int y) {
-//        Piece piece = Board.getSquare(x, y).getPiece();
-//       try {
-//        //if this Piece is BLACK, the turn is 1 less than WHITE when calculating
-//        //turn move.
-//        boolean firstMove = getPlayer().getSide() == Sides.WHITE 
-//                ? ((Pawn) piece).getMoveTurn() + 1 == getPlayer().getTurn() 
-//                : ((Pawn) piece).getMoveTurn() == getPlayer().getTurn();
-//                
-//        return piece.getPieceType() == Pieces.PAWN
-//                        //Check if the neighbor is first move PAWN
-//                && piece.getSteps() == 1 && firstMove;
-//                      //Check if this is a immediately en passant
-//       } catch(Exception ex) {return false;}
-//    }
+     * @param target
+     *          The Square of the potential target
+     * @return true or false if it is valid move
+     */
+    boolean enPassant(Square target) {
+    	int x = getX(), y = getY(), X = target.X, Y = target.Y;
+        try {// two side pawn highlight check results arrayoutofbound exception.
+        if (player.side == Player.Sides.WHITE) {
+            if (sidePawnCheck(x - 1, y)) // left target
+                return X + 1 == x && Y - 1 == y; //prevent random click
+            if (sidePawnCheck(x + 1, y)) // right target
+                return X - 1 == x && Y - 1 == y;
+        } else { //BLACK SIDE
+            if (sidePawnCheck(x - 1, y)) //left target
+                return X + 1 == x && Y + 1 == y;
+            if (sidePawnCheck(x + 1, y))  //right target
+                return X - 1 == x && Y + 1 == y;
+        }}catch (ArrayIndexOutOfBoundsException ex) {}
+        return false;
+    }
+    
+    /** check if the Piece on the specified position is a first move Pawn.
+     * @param x
+     *          horizontal index
+     * @param y
+     *          vertical index
+     * @return true or false the Piece on this position is a first move Pawn.
+     */
+    private boolean sidePawnCheck(int x, int y) {
+        Piece piece = boardGame.board.getBoard()[x][y].getPiece();
+        try {
+            //if this Piece is BLACK, the turn is 1 less than WHITE when calculating
+            //turn move.
+            boolean firstMove = player == boardGame.getFirstMovePlayer() 
+                    ? ((Pawn) piece).getMoveTurn() + 1 == player.getTurn() 
+                    : ((Pawn) piece).getMoveTurn() == player.getTurn();
+                    
+            return piece.getType() == Pieces.PAWN
+                            //Check if the neighbor is first move PAWN
+                    && piece.getSteps() == 1 && firstMove;
+                          //Check if this is an immediate en passant
+       } catch(Exception ex) {return false;}
+    }
     
     /**
      * Pawn basic move check.

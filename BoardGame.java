@@ -16,7 +16,9 @@ public abstract class BoardGame implements Serializable {
     public final int boardSize;
     /** Current turn player. */
     private Player crp;
-        
+    /** first move player. */
+    private Player firstmove;
+    
     /**
      * Initialize the Board game information. 
      * Also Initialize the board using provided board size and override
@@ -31,11 +33,27 @@ public abstract class BoardGame implements Serializable {
     protected BoardGame(Player player1, Player player2, int boardsize) {
         white = player1;
         black = player2;
-        crp = white;
         boardSize = boardsize;
         board = new Board(boardsize);
         setBoard(); //setup Pieces in the board.
     }
+    
+    /**
+     * Initialize first move player.
+     * @param player
+     *				first move player
+     */
+    public void setFirstMovePlayer(Player player) {
+    	if(crp == null) {
+    		crp = player;
+    		firstmove = player;
+    	}
+    }
+    
+    /** return the current player. */
+    public Player getCurrentPlayer() { return crp; }
+    /** return the first player. */
+    public Player getFirstMovePlayer() {return firstmove; }
     
     /** Child class need to override this method set up the Pieces
      * on the board with getBoard method.
