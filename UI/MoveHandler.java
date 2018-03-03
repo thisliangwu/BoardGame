@@ -1,3 +1,7 @@
+package UI;
+
+import boardgame.*;
+import chessgame.piece.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 

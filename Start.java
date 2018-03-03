@@ -1,3 +1,6 @@
+import boardgame.*;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,8 +12,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import chessgame.ChessGame;
+import UI.*;
+import javafx.event.ActionEvent;
 
 /** Board Game GUI. Initialize the board game and Board GridPane.
  * 
@@ -52,10 +59,20 @@ public class Start extends Application {
 //-----------------------------------Menu Bar -------------------------------------------//    
     /** Menu bar. */
     private class Menu extends HBox {
+    	/** Default Save and Load game path. */
+    	static final String DEFAULTPATH = "./storedgames";
+    	/** Save and Load game file chooser. */
+    	FileChooser fileChooser;
+    	/** Menu Buttons. */
+    	final Button chess = new Button("New Chess");
+    	final Button save = new Button("Save");
+    	final Button resume = new Button("Load");
+    	
         /** Construct Menu bar.  */
         Menu() {
-        	//new chess game
-            Button chess = new Button("New Chess");
+        	initializeFileChooser();
+        	
+//--------------------------------New Chess Game ----------------------------------------//    
             chess.setOnAction((e) ->{
                 boardGame = new ChessGame(
                         new Player(null, Player.Sides.WHITE),
@@ -63,13 +80,23 @@ public class Start extends Application {
                 buidBoard(boardGame);
             });
             
-            //save menu
-            Button save = new Button("Save");
-            save.setOnAction((e) -> {
-            	if(boardGame == null)
-            		throw new NullPointerException();
+            save.setOnAction(this::saveGame);
+            resume.setOnAction(this::loadGame);
+            getChildren().addAll(chess, save, resume);
+        }
+        
+//--------------------------------- Save Game ------------------------------------------//         
+        /** Save the current board game to the selected path. */
+        void saveGame(ActionEvent e) {
+        	if(boardGame == null)
+        		throw new NullPointerException();
+        	
+        	fileChooser.setTitle("Save " + boardGame.getClass().getSimpleName());
+        	File file = fileChooser.showSaveDialog(stage);
+        	
+        	if(file != null)
                 try {
-                    FileOutputStream fo = new FileOutputStream("test.gam");
+                    FileOutputStream fo = new FileOutputStream(file);
                     ObjectOutputStream oo = new ObjectOutputStream(fo);
                     oo.writeObject(boardGame);
                     oo.close();
@@ -77,13 +104,17 @@ public class Start extends Application {
                 } catch(IOException ex) {
                     ex.printStackTrace();
                 }
-            });
-            
-            //Resume menu
-            Button resume = new Button("Load");
-            resume.setOnAction((e) -> {
+        }
+        
+//-------------------------------- Load Game ------------------------------------------//
+        /** Load the selected board game into this UI board. */
+        void loadGame(ActionEvent e) {
+        	fileChooser.setTitle("Load Board Game");
+        	File file = fileChooser.showOpenDialog(stage);
+        	
+        	if(file != null)
                 try {
-                    FileInputStream fi = new FileInputStream("test.gam");
+                    FileInputStream fi = new FileInputStream(file);
                     ObjectInputStream oi = new ObjectInputStream(fi);
                     boardGame = (BoardGame) oi.readObject();
                     oi.close();
@@ -93,9 +124,19 @@ public class Start extends Application {
                 } catch(IOException ex)  {
                     ex.printStackTrace();
                 }
-                buidBoard(boardGame);
-            });
-            getChildren().addAll(chess, save, resume);
+            buidBoard(boardGame);
+        }
+        
+        
+        /**
+         * Initialize the file Chooser for the default save and load path.
+         * And set default save extension to "*.gam".
+         */
+        void initializeFileChooser() {
+        	fileChooser = new FileChooser();
+        	fileChooser.setInitialDirectory(new File(DEFAULTPATH));
+        	FileChooser.ExtensionFilter fileExtend = new FileChooser.ExtensionFilter("Board Game","*.gam");
+        	fileChooser.getExtensionFilters().add(fileExtend);
         }
         
         /** Build the GUI board based on the boardGame information.

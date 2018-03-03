@@ -1,3 +1,5 @@
+package boardgame;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -77,7 +79,7 @@ public abstract class BoardGame implements Serializable {
         return list.toArray(new Square[0]);
     }
     
-    protected final Square[] getTargets(Square selected) {
+    public final Square[] getTargets(Square selected) {
     	return getTargets(selected.getPiece());
     }
     
@@ -98,7 +100,7 @@ public abstract class BoardGame implements Serializable {
      * @param target
      *              the target Square that the selected Piece move to
      */
-    protected void endTurn(Square selected, Square target) { 
+    public void endTurn(Square selected, Square target) { 
         selected.getPiece().moveTo(target.X, target.Y);
         
         if (crp == white) { //switch move side

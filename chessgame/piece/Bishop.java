@@ -1,3 +1,7 @@
+package chessgame.piece;
+
+import boardgame.*;
+
 /** Bishop Piece in the chess game. */
 public final class Bishop extends Piece {
     
@@ -15,7 +19,7 @@ public final class Bishop extends Piece {
     }
 
     @Override
-    protected boolean movable(Square t) {
+    public boolean movable(Square t) {
         return diagonalMove(t) && super.movable(t);
     } 
     

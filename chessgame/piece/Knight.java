@@ -1,3 +1,7 @@
+package chessgame.piece;
+
+import boardgame.*;
+
 /** Knight Piece in the chess game. */
 public final class Knight extends Piece {
     
@@ -10,12 +14,12 @@ public final class Knight extends Piece {
      * @param y
      *          The horizontal index of this Piece on the Board
      */
-    Knight(BoardGame bg, Player player, int x, int y) {
+    public Knight(BoardGame bg, Player player, int x, int y) {
         super(bg, Pieces.KNIGHT, player, x, y);
     }
 
     @Override
-    protected boolean movable(Square t) {
+    public boolean movable(Square t) {
         return super.movable(t) && jumpable(t);
     }  
     

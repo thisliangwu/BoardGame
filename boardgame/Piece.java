@@ -1,3 +1,5 @@
+package boardgame;
+
 import java.io.Serializable;
 
 /** The Piece class is an abstract class that store the information
@@ -11,7 +13,7 @@ public abstract class Piece implements Serializable {
 	/** the current board game. */
 	protected final BoardGame boardGame;
     /** The player that this Piece belongs to. */
-	protected final Player player;
+	public final Player player;
     /** The vertical index of this Piece on the Board. */
     private int x;
     /** The horizontal index of this Piece on the Board. */
@@ -80,7 +82,7 @@ public abstract class Piece implements Serializable {
      *          target Square that this Piece trying to move to
      * @return true or false if this piece can move to the target Square
      */
-    protected boolean movable(Square target) {
+    public boolean movable(Square target) {
         return target.getPiece() == null 
                 || player != target.getPiece().player;
     };

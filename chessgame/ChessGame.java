@@ -1,3 +1,8 @@
+package chessgame;
+
+import boardgame.*;
+import chessgame.piece.*;
+
 /** Chess Game records Players information and the current Player.
   * The chess Game class also initialize all Pieces on the Board.
   */
@@ -5,7 +10,7 @@ public final class ChessGame extends BoardGame {
     /** Chess board size. */
     static final int BOARDSIZE = 8;
     /**Initialize a new Chess Game. */
-    ChessGame(Player player1, Player player2) {
+    public ChessGame(Player player1, Player player2) {
         super(player1, player2, BOARDSIZE);
     }
     
@@ -39,7 +44,7 @@ public final class ChessGame extends BoardGame {
     }  
     
     @Override
-    protected void endTurn(Square selected, Square target) {
+	public void endTurn(Square selected, Square target) {
         pawnFirstMove(selected);
         kingCastling(selected, target);
         pawnEnpassant(selected, target);
@@ -75,6 +80,7 @@ public final class ChessGame extends BoardGame {
         Square[][] sqrs = board.getBoard();
         
         if (s.getPiece().getType() == Pieces.KING) {
+        	try {
             if (X < x && ((King) s.getPiece()).leftCastling(t)) { //left castling
                 sqrs[r][y].setPiece(sqrs[l][y].getPiece());
                 sqrs[l][y].setPiece(null);
@@ -83,6 +89,7 @@ public final class ChessGame extends BoardGame {
             	sqrs[l][y].setPiece(sqrs[r][y].getPiece());
                 sqrs[r][y].setPiece(null);
             }
+        	} catch(NullPointerException ex) {} //try to castling but actually not
         }
     }
 }

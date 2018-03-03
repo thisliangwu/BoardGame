@@ -1,3 +1,7 @@
+package chessgame.piece;
+
+import boardgame.*;
+
 /** Queen Piece in the chess game. */
 public final class Queen extends Piece {
     
@@ -15,7 +19,7 @@ public final class Queen extends Piece {
     }
 
     @Override
-    protected boolean movable(Square t) {
+    public boolean movable(Square t) {
         return super.movable(t) && (hMove(t) || vMove(t) || diagonalMove(t));
     }
     

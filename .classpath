@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry excluding="UI/|chessgame/piece/|chessgame/" kind="src" path=""/>
-	<classpathentry excluding="piece/" kind="src" path="chessgame"/>
-	<classpathentry kind="src" path="chessgame/piece"/>
-	<classpathentry kind="src" path="UI"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

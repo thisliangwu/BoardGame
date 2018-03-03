@@ -1,3 +1,5 @@
+package boardgame;
+
 import java.io.Serializable;
 
 /** Board game Player information. */

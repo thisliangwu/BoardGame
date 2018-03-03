@@ -1,3 +1,7 @@
+package chessgame.piece;
+
+import boardgame.*;
+
 /** Pawn Piece in the chess game. */
 public final class Pawn extends Piece {
     /** First move Player turn for enpassant move checking. */
@@ -11,12 +15,12 @@ public final class Pawn extends Piece {
      * @param y
      *          The vertical index of this Piece on the Board
      */
-    Pawn(BoardGame bg, Player player, int x, int y) {
+    public Pawn(BoardGame bg, Player player, int x, int y) {
         super(bg, Pieces.PAWN, player, x, y);
     }
 
     @Override
-    protected boolean movable(Square t) {
+    public boolean movable(Square t) {
         boolean res = super.movable(t);
         return res && (basicMove(t) || enDiagonal(t) || enPassant(t));
     }
@@ -26,7 +30,7 @@ public final class Pawn extends Piece {
      * @param i
      *          the player turn when this pawn move
      */
-    void setMoveTurn(int i) {
+    public void setMoveTurn(int i) {
         moveTurn = i;
     }
     
@@ -60,7 +64,7 @@ public final class Pawn extends Piece {
      *          The Square of the potential target
      * @return true or false if it is valid move
      */
-    boolean enPassant(Square target) {
+    public boolean enPassant(Square target) {
     	int x = getX(), y = getY(), X = target.X, Y = target.Y;
         try {// two side pawn highlight check results arrayoutofbound exception.
         if (player.side == Player.Sides.WHITE) {

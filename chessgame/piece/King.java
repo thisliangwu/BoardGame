@@ -1,3 +1,7 @@
+package chessgame.piece;
+
+import boardgame.*;
+
 /** King Piece in the chess game. */
 public final class King extends Piece {
 
@@ -15,7 +19,7 @@ public final class King extends Piece {
     }
     
     @Override
-    protected boolean movable(Square t) {
+    public boolean movable(Square t) {
         return super.movable(t) && (basicMove(t) || castling(t));
     }
     
@@ -33,13 +37,13 @@ public final class King extends Piece {
     	
         if (getY() != t.Y || getSteps() != 0)
             return false; //King and rook not in the same line
-        try {
+       try {
        if (t.X < getX())
            return leftCastling(t);
        else 
            return rightCastling(t);
-        }catch(Exception ex) {
-            return false;
+        }catch(NullPointerException ex) {
+            return false; //attempt to castling without rook
         }
     }
     
