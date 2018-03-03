@@ -45,33 +45,41 @@ public final class ChessGame extends BoardGame {
     
     @Override
 	public void endTurn(Square selected, Square target) {
-        pawnFirstMove(selected);
-        kingCastling(selected, target);
-        pawnEnpassant(selected, target);
+    	Piece piece = selected.getPiece();
+    	if(piece instanceof Pawn) {
+            pawnFirstMove((Pawn)piece);
+            pawnEnpassant((Pawn)piece, target);
+    	}
+    	if(piece instanceof King)
+    		kingCastling(selected, target);
         try {
             super.endTurn(selected, target);
         } catch (Exception ex) {}
     }
     
-    /**
-     * Check if it is the first move of Pawn. If true record the current 
-     * Player turn to the Pawn for enpassant move calculation.
-     * @param s
-     *              potential PAWN first move
-     */
-    private void pawnFirstMove(Square s) {
-        Piece piece = s.getPiece();
-        if (piece.getType() == Pieces.PAWN && piece.getSteps() == 0) {
-            ((Pawn) piece).setMoveTurn(piece.player.getTurn());
+    /** Check and record the player turn when the pawn first move
+     * for enpassant calculation. */
+    private void pawnFirstMove(Pawn pawn) {
+        if (pawn.getSteps() == 0) {
+            pawn.setMoveTurn(pawn.player.getTurn());
         }
     }
     
-    /**Perform pawn enpassant.  */
-    private void pawnEnpassant(Square s, Square t) {
-        Piece m = s.getPiece();
-        if (m.getType() == Pieces.PAWN && ((Pawn) m).enPassant(t)) {
-            board.getBoard()[t.X][s.Y].setPiece(null);
+    /**CHeck and Perform pawn enpassant.  */
+    private void pawnEnpassant(Pawn pawn, Square t) {
+        if (pawn.enPassant(t)) {
+            board.getBoard()[t.X][pawn.getY()].setPiece(null);
         }
+    }   
+    
+    /** Valid and Promote the Pawn to the target Piece. */
+    public void promotion(Piece piece, Piece target) {
+    	if(!(piece instanceof Pawn) || piece.getY() != BOARDSIZE - 1
+    			|| !(target instanceof Queen) && !(target instanceof Knight)
+    			&& !(target instanceof Rook) && !(target instanceof Bishop))
+    		return;
+    	board.getBoard()[piece.getX()][piece.getY()].setPiece(target);
+    		
     }
     
     /**Perform king castling. */

@@ -1,9 +1,13 @@
 package UI;
 
+import java.util.Optional;
+
 import boardgame.*;
+import chessgame.ChessGame;
 import chessgame.piece.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ChoiceDialog;
 
 /** The ClickHandler highlights the selected Square and validates
  * the move of Pieces.
@@ -62,25 +66,58 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 //Special move that the selected Piece does not directly
                 //click on the target Piece.
                 Piece p = click.square.getPiece();
-                if(p instanceof Pawn)
-                	enpassand((Pawn)click.square.getPiece());
+                if(p instanceof Pawn) {
+                	if(p.getY() == boardGame.boardSize - 1) 
+                		promotion((Pawn) p);
+                	else
+                		renderPawn((Pawn)click.square.getPiece());
+                }	
                 if(p instanceof King)
-                	castling((King)click.square.getPiece());
+                	renderKing((King)click.square.getPiece());
                 pathOff();
             }    
         }
     }
     
+    /** Dialog box for receiving promotion information. */
+    private void promotion(Pawn pawn) {
+    	Pieces choices[] = {Pieces.QUEEN, Pieces.KNIGHT, Pieces.ROOK, Pieces.BISHOP};
+    	ChoiceDialog<Pieces> dialog = new ChoiceDialog<>(choices[0], choices);
+    	
+    	dialog.setTitle("Promotion");
+    	dialog.setHeaderText("Select the promote type");
+    	Optional<Pieces> res  = dialog.showAndWait();
+    	
+    	int x =pawn.getX(), y =pawn.getY();
+    	Piece piece = null;
+    	switch(res.orElse(null)) {
+	    	case QUEEN:
+	    		piece = new Queen(boardGame, pawn.player, x, y);
+	    	case KNIGHT:
+	    		piece = new Knight(boardGame, pawn.player, x, y);
+	    	case ROOK:
+	    		piece = new Rook(boardGame, pawn.player, x, y);
+	    	case BISHOP:
+	    		piece = new Bishop(boardGame, pawn.player, x, y);
+	    	default:
+    	}
+    	
+		((ChessGame)boardGame).promotion(pawn, piece);
+		UIBoard.getSquare(x, y).putPiece(boardGame.board.getBoard()[x][y].getPiece());
+    }
+    
     /**
-     * Perform special move in the Board UI.
+     * Perform special move and promotion for Pawn in the Board UI.
      * re-render the surrounding Piece in case enpassant 
      * @param piece
      * 			target Pawn
      */
-    private void enpassand(Pawn piece) {
+    private void renderPawn(Pawn piece) {
     	int x = piece.getX(), y = piece.getY();
-    	UIBoard.getSquare(x, y - 1).putPiece(boardGame.board.getBoard()[x][y - 1].getPiece());
-    	UIBoard.getSquare(x, y + 1).putPiece(boardGame.board.getBoard()[x][y + 1].getPiece());
+    	try {
+	    	UIBoard.getSquare(x, y - 1).putPiece(boardGame.board.getBoard()[x][y - 1].getPiece());
+	    	UIBoard.getSquare(x, y + 1).putPiece(boardGame.board.getBoard()[x][y + 1].getPiece());
+    	} catch(ArrayIndexOutOfBoundsException ex) {/* Pawn reach the other end */}
     }
     
     /**
@@ -89,7 +126,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
      * @param piece
      * 			target Pawn
      */
-    private void castling(King piece) {
+    private void renderKing(King piece) {
     	int x = piece.getX(), y = piece.getY();
     	UIBoard.getSquare(x - 1, y).putPiece(boardGame.board.getBoard()[x - 1][y].getPiece());
     	UIBoard.getSquare(x + 1, y).putPiece(boardGame.board.getBoard()[x + 1][y].getPiece());
