@@ -46,6 +46,7 @@ public class Start extends Application {
         stage.setTitle("Board Game");
         stage.setScene(scene);
         stage.show();
+        
     }
     
     /**
