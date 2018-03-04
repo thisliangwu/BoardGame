@@ -35,7 +35,7 @@ public final class King extends Piece {
      */
     public boolean castling(Square t) {
     	
-        if (getY() != t.Y || getSteps() != 0)
+        if (getY() != t.Y || getSteps() != 0 || boardGame.isChecked(player))
             return false; //King and rook not in the same line
        try {
        if (t.X < getX())
@@ -55,7 +55,13 @@ public final class King extends Piece {
         //target is not ROOK or have moved
         if (rook.getType() != Pieces.ROOK || rook.getSteps() != 0)
                 return false;
-        return pathCheck(X, getX(), y);
+        
+        for(int i = X; i < getX(); i++) {
+        	Square path = boardGame.board.getBoard()[i][y];
+            if (path.getPiece() != null || targeted(path))
+                return false; 
+        }
+        return true;
     }
     
     /** target ROOK on the right. */
@@ -65,27 +71,22 @@ public final class King extends Piece {
     	
     	if (rook.getType() != Pieces.ROOK || rook.getSteps() != 0)
             return false;
-        return pathCheck(getX(), X, y);
-    }
-    
-    /**
-     * Check the castling path is clear or not.
-     * 
-     * @param smlX
-     * 			relative smaller index of target rook and king
-     * @param larX
-     * 			relative larger X index
-     * @param Y
-     * 			y index in the board
-     * @return if the path is clear.
-     */
-    private boolean pathCheck(int smlX, int larX, int Y) {
-    	//Piece block the path
-        for (int i = smlX + 1; i < larX; i++) {
-            if (boardGame.board.getBoard()[i][Y].getPiece() != null)
+    	
+    	for (int i = getX() + 1; i < X; i++) {
+        	Square path = boardGame.board.getBoard()[i][y];
+            if (path.getPiece() != null || targeted(path))
                 return false; 
         }
-        return true;
+    	return true;
+    }
+    
+    /** Check if the provided position is potential target of the opponent's Pieces. */
+    private boolean targeted(Square target) {
+    	Player opo = player == boardGame.white ? boardGame.black : boardGame.white;
+    	for(Piece piece : opo.getAllPieceAsSet())
+    		if(piece.movable(target))
+    			return true;
+    	return false;
     }
        
 }

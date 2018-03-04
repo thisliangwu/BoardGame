@@ -7,11 +7,10 @@ import javafx.scene.layout.GridPane;
  * coordinate of each Square.
  */
 public class UIBoard extends GridPane {
-	
+	/** Sound Player. */
+    private static final PlaySound PLAYER = new PlaySound();
     /**Square array to track the position of different Squares.*/
     private static UISquare[][] sqrs;
-    /** Sound Player. */
-    private static PlaySound player;
 
     /** Initialize the board.
      * @param boardGame
@@ -32,12 +31,12 @@ public class UIBoard extends GridPane {
                 add(s, i, j); //add Square button to GridPane
             }
         }
-        player = new PlaySound(); //play BGM
+//        player = new PlaySound(); //play BGM
     }
     
     /** BGM play switch. */
     public void BGM(SoundEffect.Switch sw) {
-    	player.BGM(sw);
+    	PLAYER.BGM(sw);
     }
 
     /** Get the Square at the specified Coordinates. */

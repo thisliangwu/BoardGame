@@ -1,5 +1,7 @@
 package chessgame;
 
+import java.util.HashSet;
+
 import boardgame.*;
 import chessgame.piece.*;
 
@@ -22,27 +24,42 @@ public final class ChessGame extends BoardGame {
         initializePiece(black);
     }
     
+    @Override
+    public boolean isChecked(Player player) {
+    	Piece keyPiece = player.getKeyPiece();
+    	Player p = player == white ? black : white;
+    	for(Piece piece : p.getAllPieceAsSet())
+    		if(piece.movable(board.getBoard()[keyPiece.getX()][keyPiece.getY()]))
+    			return true;
+    	return false;
+    }
+    
     /** Initialize Pieces for different Players.
      * @param p
      *          the player that this Piece belong to.
      */
     private void initializePiece(Player p) {
+    	HashSet<Piece> pieces = new HashSet<>();
         int pawnLine = p.side == Player.Sides.WHITE ? 1 : BOARDSIZE - 2;
         int kingLine = p.side == Player.Sides.WHITE ? 0 : BOARDSIZE - 1;
         
         for (int i = 0; i < BOARDSIZE; i++) {
-            board.getBoard()[i][pawnLine].setPiece(new Pawn(this, p, i, pawnLine));
+          pieces.add(new Pawn(this, p, i, pawnLine));
         }
         King king = new King(this, p, 3, kingLine);
+        pieces.add(king);
+        pieces.add(new Rook(this, p, 0, kingLine));
+        pieces.add(new Knight(this, p, 1, kingLine));
+        pieces.add(new Bishop(this, p, 2, kingLine));
+        pieces.add(new Queen(this, p, 4, kingLine));
+        pieces.add(new Bishop(this, p, 5, kingLine));
+        pieces.add(new Knight(this, p, 6, kingLine));
+        pieces.add(new Rook(this, p, 7, kingLine));
         p.setKeyPiece(king); //Set up key piece.
-        board.getBoard()[0][kingLine].setPiece(new Rook(this, p, 0, kingLine)); 
-        board.getBoard()[1][kingLine].setPiece(new Knight(this, p, 1, kingLine)); 
-        board.getBoard()[2][kingLine].setPiece(new Bishop(this, p, 2, kingLine));
-        board.getBoard()[3][kingLine].setPiece(king);
-        board.getBoard()[4][kingLine].setPiece(new Queen(this, p, 4, kingLine));
-        board.getBoard()[5][kingLine].setPiece(new Bishop(this, p, 5, kingLine));
-        board.getBoard()[6][kingLine].setPiece(new Knight(this, p, 6, kingLine));
-        board.getBoard()[7][kingLine].setPiece(new Rook(this, p, 7, kingLine));
+        p.addPiece(pieces);  //Add all pieces to to player.
+        
+        for(Piece piece : p.getAllPieceAsSet())
+        	board.getBoard()[piece.getX()][piece.getY()].setPiece(piece);
     }  
     
     @Override

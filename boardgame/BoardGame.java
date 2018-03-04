@@ -57,10 +57,14 @@ public abstract class BoardGame implements Serializable {
     /** return the first player. */
     public Player getFirstMovePlayer() {return firstmove; }
     
-    /** Child class need to override this method set up the Pieces
-     * on the board with getBoard method.
+    /** Child class need to override this method set up the Pieces to 
+     * each player(setPieces), and setup the key Piece(setKeyPiece)
+     * as well as put them on the board with board.getBoard method.
      */
     protected abstract void setBoard();
+    
+    /** Check if the specified Player is being checked. */
+    public abstract boolean isChecked(Player player);
     
     /**
      * Return an array of potential targets for the Piece on this Square.
