@@ -79,8 +79,15 @@ public abstract class BoardGame implements Serializable {
         return list.toArray(new Square[0]);
     }
     
+    /** Return all possible Square that the selected Piece on this Square can move to. */
     public final Square[] getTargets(Square selected) {
     	return getTargets(selected.getPiece());
+    }
+    
+    /** Check if the target Piece is checking the opponent's key Piece. */
+    public boolean check(Piece target) {
+    	Piece king = target.player == white ? black.getKeyPiece() : white.getKeyPiece();
+    	return target.movable(board.getBoard()[king.getX()][king.getY()]);
     }
     
     /** Check if the target player is in turn to move. 

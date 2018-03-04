@@ -1,7 +1,6 @@
 package UI;
 
 import boardgame.BoardGame;
-
 import javafx.scene.layout.GridPane;
 
 /** The Board Grid layout store a 2 dimension array to keep track of the

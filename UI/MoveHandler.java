@@ -1,13 +1,19 @@
 package UI;
 
-import java.util.Optional;
-
 import boardgame.*;
 import chessgame.ChessGame;
 import chessgame.piece.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.media.AudioClip;
+
+/** Sound effect type and the path. */
+enum SoundEffect {
+	CHECK("./sound/check.wav"), MOVE("./sound/move.wav"), GAMEOVER("./sound/gameover.wav");
+	public final String path;
+	SoundEffect(String path) {this.path = path;}	
+}
 
 /** The ClickHandler highlights the selected Square and validates
  * the move of Pieces.
@@ -74,9 +80,24 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 }	
                 if(p instanceof King)
                 	renderKing((King)click.square.getPiece());
+                
+                //Check if this moved Piece is checking the opponent's king.
+                //Play sound effect
+                if(boardGame.check(p))
+                	soundEffect(SoundEffect.CHECK);
+                else
+                	soundEffect(SoundEffect.MOVE);
                 pathOff();
             }    
         }
+    }
+    
+    /** Play the selected sound effect. */
+    private void soundEffect(SoundEffect effect) {
+    	try {
+	    	String soundFile = effect.path;
+	    	new AudioClip(getClass().getResource(soundFile).toExternalForm()).play();
+    	} catch(Exception ex) { /* path invalid */}
     }
     
     /** Dialog box for receiving promotion information. */
@@ -86,21 +107,22 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     	
     	dialog.setTitle("Promotion");
     	dialog.setHeaderText("Select the promote type");
-    	Optional<Pieces> res  = dialog.showAndWait();
+    	Pieces res  = dialog.showAndWait().orElse(null);
     	
     	int x =pawn.getX(), y =pawn.getY();
     	Piece piece = null;
-    	switch(res.orElse(null)) {
-	    	case QUEEN:
-	    		piece = new Queen(boardGame, pawn.player, x, y);
-	    	case KNIGHT:
-	    		piece = new Knight(boardGame, pawn.player, x, y);
-	    	case ROOK:
-	    		piece = new Rook(boardGame, pawn.player, x, y);
-	    	case BISHOP:
-	    		piece = new Bishop(boardGame, pawn.player, x, y);
-	    	default:
-    	}
+    	if(res != null)
+	    	switch(res) {
+	    		case QUEEN:
+	    			piece = new Queen(boardGame, pawn.player, x, y); break;
+		    	case KNIGHT:
+		    		piece = new Knight(boardGame, pawn.player, x, y); break;
+		    	case ROOK:
+		    		piece = new Rook(boardGame, pawn.player, x, y); break;
+		    	case BISHOP:
+		    		piece = new Bishop(boardGame, pawn.player, x, y); break;
+		    	default:		
+	    	}
     	
 		((ChessGame)boardGame).promotion(pawn, piece);
 		UIBoard.getSquare(x, y).putPiece(boardGame.board.getBoard()[x][y].getPiece());
