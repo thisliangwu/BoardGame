@@ -6,14 +6,7 @@ import chessgame.piece.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.media.AudioClip;
 
-/** Sound effect type and the path. */
-enum SoundEffect {
-	CHECK("./sound/check.wav"), MOVE("./sound/move.wav"), GAMEOVER("./sound/gameover.wav");
-	public final String path;
-	SoundEffect(String path) {this.path = path;}	
-}
 
 /** The ClickHandler highlights the selected Square and validates
  * the move of Pieces.
@@ -62,18 +55,20 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 return;
             }
             if(selected.square.getPiece().movable(click.square)) {
-                //end the turn
+//                end the turn
                 boardGame.endTurn(selected.square, click.square);
                 
-                //perform UI moving
+//                perform UI moving
                 selected.putPiece(selected.square.getPiece());
                 click.putPiece(click.square.getPiece());
                 
-                //Special move that the selected Piece does not directly
-                //click on the target Piece.
+//                Special move that the selected Piece does not directly
+//                click on the target Piece.
                 Piece p = click.square.getPiece();
                 if(p instanceof Pawn) {
-                	if(p.getY() == boardGame.boardSize - 1) 
+                	Player.Sides side = p.player.side;
+                	if(side == Player.Sides.WHITE && p.getY() == boardGame.boardSize - 1
+                			|| side == Player.Sides.BLACK && p.getY() == 0) 
                 		promotion((Pawn) p);
                 	else
                 		renderPawn((Pawn)click.square.getPiece());
@@ -81,24 +76,16 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 if(p instanceof King)
                 	renderKing((King)click.square.getPiece());
                 
-                //Check if this moved Piece is checking the opponent's king.
-                //Play sound effect
-                if(boardGame.check(p))
-                	soundEffect(SoundEffect.CHECK);
+//                Check if this moved Piece is checking the opponent's king.
+//                Play sound effect
+                if(boardGame.check(click.square.getPiece()))
+                	PlaySound.playSoundEffect(SoundEffect.CHECK);
                 else
-                	soundEffect(SoundEffect.MOVE);
+                	PlaySound.playSoundEffect(SoundEffect.MOVE);
                 pathOff();
             }    
         }
-    }
-    
-    /** Play the selected sound effect. */
-    private void soundEffect(SoundEffect effect) {
-    	try {
-	    	String soundFile = effect.path;
-	    	new AudioClip(getClass().getResource(soundFile).toExternalForm()).play();
-    	} catch(Exception ex) { /* path invalid */}
-    }
+    }   
     
     /** Dialog box for receiving promotion information. */
     private void promotion(Pawn pawn) {
