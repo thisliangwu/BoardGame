@@ -10,6 +10,8 @@ public class Player implements Serializable {
     public final Sides side;
     /** number of turn this Player have moved. */
     private int turns;
+    /** Key Piece for determining lose. */
+    private Piece king;
     /** two side of a chess game. */
     public static enum Sides {
         WHITE, BLACK;
@@ -28,19 +30,11 @@ public class Player implements Serializable {
         turns = 0;
     }
     
-//    /** Player name getter. 
-//     * @return the name of the Player
-//     */
-//    final String getName() { 
-//        return name; 
-//    }
-//    
-//    /** Return which side this Player is.
-//     * @return side of this player.
-//     */
-//    final Sides getSide() {
-//        return side;
-//    }
+    /** Set key Piece for determining lose. */
+    public final void setKeyPiece(Piece piece) { king = piece;}
+    
+    /** Get key Piece for determining lose. */
+    public final Piece getKeyPiece() {return king;}
     
     /** End the current turn and increment counter. */
     public final void endTurn() {turns++;}

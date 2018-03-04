@@ -1,7 +1,6 @@
 package UI;
 
 import boardgame.*;
-
 import java.io.File;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
