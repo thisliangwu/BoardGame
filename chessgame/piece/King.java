@@ -81,8 +81,8 @@ public final class King extends Piece {
      */
     private boolean pathCheck(int smlX, int larX, int Y) {
     	//Piece block the path
-        for (int i = smlX; i > larX; i--) {
-            if (boardGame.board.getBoard()[i - 1][Y].getPiece() != null)
+        for (int i = smlX + 1; i < larX; i++) {
+            if (boardGame.board.getBoard()[i][Y].getPiece() != null)
                 return false; 
         }
         return true;

@@ -15,7 +15,7 @@ enum SoundEffect {
 
 /** Play BGM and sound effect. */
 public class PlaySound {
-	AudioClip bgm; 
+	private AudioClip bgm; 
 	
 	/** Start BGM player, can be turn off with BGM method with OFF switch. */
 	public PlaySound() {
@@ -36,10 +36,10 @@ public class PlaySound {
 	}
 	
     /** Play the selected sound effect. */
-    public void playSoundEffect(SoundEffect effect) {
+    public static void playSoundEffect(SoundEffect effect) {
     	try {
 	    	String soundFile = effect.path;
-	    	new AudioClip(getClass().getResource(soundFile).toExternalForm()).play();
+	    	new AudioClip(effect.getClass().getResource(soundFile).toExternalForm()).play();
     	} catch(Exception ex) { /* path invalid */}
     }
 }

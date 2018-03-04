@@ -10,6 +10,8 @@ public class UIBoard extends GridPane {
 	
     /**Square array to track the position of different Squares.*/
     private static UISquare[][] sqrs;
+    /** Sound Player. */
+    private static PlaySound player;
 
     /** Initialize the board.
      * @param boardGame
@@ -30,6 +32,12 @@ public class UIBoard extends GridPane {
                 add(s, i, j); //add Square button to GridPane
             }
         }
+        player = new PlaySound(); //play BGM
+    }
+    
+    /** BGM play switch. */
+    public void BGM(SoundEffect.Switch sw) {
+    	player.BGM(sw);
     }
 
     /** Get the Square at the specified Coordinates. */

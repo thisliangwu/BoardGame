@@ -61,12 +61,15 @@ public final class ChessGame extends BoardGame {
     
     /** Valid and Promote the Pawn to the target Piece. */
     public void promotion(Piece piece, Piece target) {
-    	if(!(piece instanceof Pawn) || piece.getY() != BOARDSIZE - 1
-    			|| !(target instanceof Queen) && !(target instanceof Knight)
-    			&& !(target instanceof Rook) && !(target instanceof Bishop))
+    	if(!(piece instanceof Pawn) 
+			&& (piece.player != white || piece.getY() != BOARDSIZE -1)
+			&& (piece.player != black || piece.getY() != 0))
     		return;
-    	board.getBoard()[piece.getX()][piece.getY()].setPiece(target);
-    		
+    			
+    	if(!(target instanceof Queen) && !(target instanceof Knight)
+    		&& !(target instanceof Rook) && !(target instanceof Bishop))
+    		return;
+    	board.getBoard()[piece.getX()][piece.getY()].setPiece(target);		
     }
     
     /** Check and record the player turn when the pawn first move

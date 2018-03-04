@@ -18,8 +18,6 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     private static Square[] targets;
     /** Current board game. */
     private BoardGame boardGame;
-    /** Sound Player. */
-    PlaySound player;
     
     /** Construct a click listener corresponding to each Square.
      * @param bg
@@ -27,7 +25,6 @@ public class MoveHandler implements EventHandler<ActionEvent> {
      */
     public MoveHandler(BoardGame bg) {
         boardGame = bg;
-        player = new PlaySound();
     }
     
     @Override
@@ -69,7 +66,9 @@ public class MoveHandler implements EventHandler<ActionEvent> {
 //                click on the target Piece.
                 Piece p = click.square.getPiece();
                 if(p instanceof Pawn) {
-                	if(p.getY() == boardGame.boardSize - 1) 
+                	Player.Sides side = p.player.side;
+                	if(side == Player.Sides.WHITE && p.getY() == boardGame.boardSize - 1
+                			|| side == Player.Sides.BLACK && p.getY() == 0) 
                 		promotion((Pawn) p);
                 	else
                 		renderPawn((Pawn)click.square.getPiece());
@@ -79,10 +78,10 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 
 //                Check if this moved Piece is checking the opponent's king.
 //                Play sound effect
-                if(boardGame.check(p))
-                	player.playSoundEffect(SoundEffect.CHECK);
+                if(boardGame.check(click.square.getPiece()))
+                	PlaySound.playSoundEffect(SoundEffect.CHECK);
                 else
-                	player.playSoundEffect(SoundEffect.MOVE);
+                	PlaySound.playSoundEffect(SoundEffect.MOVE);
                 pathOff();
             }    
         }
