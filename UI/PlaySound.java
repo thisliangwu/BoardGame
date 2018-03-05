@@ -22,7 +22,7 @@ public class PlaySound {
 		try {
 			bgm = new AudioClip(getClass().getResource(SoundEffect.BACKGROUND.path).toExternalForm());
 			bgm.setCycleCount(AudioClip.INDEFINITE);
-	        bgm.setVolume(0.3);
+	        bgm.setVolume(0.5);
 			BGM(SoundEffect.Switch.ON);	
 		} catch(Exception ex) {/* BGM path invalid */}	
 	}

@@ -34,6 +34,10 @@ public class UIBoard extends GridPane {
 //        player = new PlaySound(); //play BGM
     }
     
+    public void buildBoard(BoardGame boardGame) {
+    	
+    }
+    
     /** BGM play switch. */
     public void BGM(SoundEffect.Switch sw) {
     	PLAYER.BGM(sw);

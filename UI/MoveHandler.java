@@ -17,7 +17,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     /** Potential target Squares that the selected Piece will move to. */
     private static Square[] targets;
     /** Current board game. */
-    private BoardGame boardGame;
+    private static BoardGame boardGame;
     
     /** Construct a click listener corresponding to each Square.
      * @param bg
@@ -30,7 +30,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent e) {
         UISquare click = (UISquare) e.getSource();
-        
+
         //initialize first click move
         if(boardGame.getCurrentPlayer() == null)
         	boardGame.setFirstMovePlayer(click.square.getPiece().player);
@@ -40,7 +40,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
             if(boardGame.isInTurn(click.square.getPiece().player)) {
                     selected = click;
                     pathOn();
-            }} catch(NullPointerException ex){}
+            }} catch(NullPointerException ex){ /* click on empty squares. */}
             
         } else { //try to move the selected Piece
             if(selected == click) { //double click the Piece to cancel select.
@@ -54,38 +54,53 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 pathOn();
                 return;
             }
-            if(selected.square.getPiece().movable(click.square)) {
-//                end the turn
-                boardGame.endTurn(selected.square, click.square);
-                
-//                perform UI moving
-                selected.putPiece(selected.square.getPiece());
-                click.putPiece(click.square.getPiece());
-                
-//                Special move that the selected Piece does not directly
-//                click on the target Piece.
-                Piece p = click.square.getPiece();
-                if(p instanceof Pawn) {
-                	Player.Sides side = p.player.side;
-                	if(side == Player.Sides.WHITE && p.getY() == boardGame.boardSize - 1
-                			|| side == Player.Sides.BLACK && p.getY() == 0) 
-                		promotion((Pawn) p);
-                	else
-                		renderPawn((Pawn)click.square.getPiece());
-                }	
-                if(p instanceof King)
-                	renderKing((King)click.square.getPiece());
-                
-//                Check if this moved Piece is checking the opponent's king.
-//                Play sound effect
-                if(boardGame.check(click.square.getPiece()))
-                	PlaySound.playSoundEffect(SoundEffect.CHECK);
-                else
-                	PlaySound.playSoundEffect(SoundEffect.MOVE);
-                pathOff();
-            }    
+            if(selected.square.getPiece().movable(click.square)) 
+            	endTurn(click);    
         }
     }   
+    
+    /**
+     * End the current turn, perform UI movement and play corresponding sound effect.
+     * @param click
+     */
+    private void endTurn(UISquare click) {
+    	Square clickSquare = click.square;
+    	Piece clickPiece = clickSquare.getPiece();
+    	Square selectedSquare = selected.square;
+    	
+//      end the turn in the board game & perform UI movement
+        boardGame.endTurn(selectedSquare, clickSquare);
+        selected.putPiece(selectedSquare.getPiece());
+        click.putPiece(clickSquare.getPiece());
+        
+//    	King dies, game over sound effect
+    	if(clickPiece != null && clickPiece instanceof King) {
+    		PlaySound.playSoundEffect(SoundEffect.GAMEOVER);
+    		boardGame = null;
+    		selected = null;
+    		return;
+    	}	
+        
+//      Special move that the selected Piece does not directly click on the target Piece.
+        Piece p = click.square.getPiece();
+        if(p instanceof Pawn) {
+        	Player.Sides side = p.player.side;
+        	if(side == Player.Sides.WHITE && p.getY() == boardGame.boardSize - 1
+        			|| side == Player.Sides.BLACK && p.getY() == 0) 
+        		promotion((Pawn) p);
+        	else
+        		renderPawn((Pawn)p);
+        }	
+        if(p instanceof King)
+        	renderKing((King)click.square.getPiece());
+        
+//      Check if this moved Piece is checking the opponent's king & Play sound effect
+        if(boardGame.check(clickSquare.getPiece()))
+        	PlaySound.playSoundEffect(SoundEffect.CHECK);
+        else
+        	PlaySound.playSoundEffect(SoundEffect.MOVE);
+        pathOff();
+    }
     
     /** Dialog box for receiving promotion information. */
     private void promotion(Pawn pawn) {
