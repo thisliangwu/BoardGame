@@ -1,24 +1,13 @@
-package UI;
+package sound;
 
 import javafx.scene.media.AudioClip;
 
-/** Sound effect type, the path and switch. */
-enum SoundEffect {
-	CHECK("./sound/check.wav"), MOVE("./sound/move.wav"), GAMEOVER("./sound/gameover.wav"),
-	BACKGROUND("./sound/back.wav");
-	
-	enum Switch { ON, OFF}
-	/** the path of the sound that is in the sub folders. */
-	public final String path;
-	SoundEffect(String path) {this.path = path;}	
-}
-
 /** Play BGM and sound effect. */
-public class PlaySound {
+public class Sound {
 	private AudioClip bgm; 
 	
 	/** Start BGM player, can be turn off with BGM method with OFF switch. */
-	public PlaySound() {
+	public Sound() {
 		try {
 			bgm = new AudioClip(getClass().getResource(SoundEffect.BACKGROUND.path).toExternalForm());
 			bgm.setCycleCount(AudioClip.INDEFINITE);
@@ -43,3 +32,4 @@ public class PlaySound {
     	} catch(Exception ex) { /* path invalid */}
     }
 }
+

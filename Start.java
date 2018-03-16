@@ -1,5 +1,6 @@
 import boardgame.*;
-
+import chessgame.*;
+import chessgame3d.ChessGame3D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,8 +16,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import chessgame.ChessGame;
-import UI.*;
+import sound.Sound;
 import javafx.event.ActionEvent;
 
 /** Board Game GUI. Initialize the board game and Board GridPane.
@@ -25,11 +25,9 @@ import javafx.event.ActionEvent;
  * @version 2018
  */
 public class Start extends Application {
-    /** current playing board game. */
+	private static final Sound SOUND = new Sound();
     private BoardGame boardGame;
-    /** GUI root. */
     private FlowPane root;
-    /** Application stage. */
     private Stage stage;
 
     @Override
@@ -40,13 +38,12 @@ public class Start extends Application {
 
         this.stage = stage;
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX(primScreenBounds.getWidth() / 4); 
-        stage.setY(10);
+        stage.setX(primScreenBounds.getWidth() / 5); 
+        stage.setY(primScreenBounds.getHeight() / 5);
         
         stage.setTitle("Board Game");
         stage.setScene(scene);
-        stage.show();
-        
+        stage.show();        
     }
     
     /**
@@ -66,6 +63,7 @@ public class Start extends Application {
     	FileChooser fileChooser;
     	/** Menu Buttons. */
     	final Button chess = new Button("New Chess");
+    	final Button chess3d = new Button("New Chess 3D");
     	final Button save = new Button("Save");
     	final Button resume = new Button("Load");
     	
@@ -76,14 +74,22 @@ public class Start extends Application {
 //--------------------------------New Chess Game ----------------------------------------//    
             chess.setOnAction((e) ->{
                 boardGame = new ChessGame(
-                        new Player(null, Player.Sides.WHITE),
-                        new Player(null, Player.Sides.BLACK));
+                        new Player(Sides.WHITE),
+                        new Player(Sides.BLACK));
+                buidBoard(boardGame);
+            });
+
+//--------------------------------New Chess Game ----------------------------------------//    
+            chess3d.setOnAction((e) ->{
+                boardGame = new ChessGame3D(
+                        new Player(Sides.WHITE),
+                        new Player(Sides.BLACK));
                 buidBoard(boardGame);
             });
             
             save.setOnAction(this::saveGame);
             resume.setOnAction(this::loadGame);
-            getChildren().addAll(chess, save, resume);
+            getChildren().addAll(chess, chess3d, save, resume);
         }
         
 //--------------------------------- Save Game ------------------------------------------//         
@@ -128,7 +134,6 @@ public class Start extends Application {
             buidBoard(boardGame);
         }
         
-        
         /**
          * Initialize the file Chooser for the default save and load path.
          * And set default save extension to "*.gam".
@@ -148,9 +153,8 @@ public class Start extends Application {
         void buidBoard(BoardGame bg) {
             try {
                 root.getChildren().remove(1);
-            } catch(IndexOutOfBoundsException ex) {}	
-            
-            root.getChildren().add(new UIBoard(bg));
+            } catch(IndexOutOfBoundsException ex) {}	            
+            root.getChildren().add(bg.board);
             stage.sizeToScene();
         }
     }

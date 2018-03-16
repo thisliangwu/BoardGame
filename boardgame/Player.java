@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /** Board game Player information. */
 public class Player implements Serializable {
-    /** Name of the Player. */
-    public final String name;
     /** white / black side. */
     public final Sides side;
     /** number of turn this Player have moved. */
@@ -16,21 +15,13 @@ public class Player implements Serializable {
     private Piece king;
     /** A set of Pieces. */
     private Set<Piece> pieces;
-    /** two side of a chess game. */
-    public static enum Sides {
-        WHITE, BLACK;
-    }
     
     /** Initialize the player's information.
-     * 
-     * @param n
-     *          name of the player
-     * @param s
+     * @param side
      *          white / black of the player
      */
-    public Player(String n, Sides s) {
-        name = n;
-        side = s;
+    public Player(Sides side) {
+        this.side = side;
         turns = 0;
         pieces = new HashSet<>();
     }
@@ -38,12 +29,16 @@ public class Player implements Serializable {
     /** Set key Piece for determining lose. */
     public final void setKeyPiece(Piece piece) { king = piece;}
     /** Get key Piece for determining lose. */
-    public final Piece getKeyPiece() {return king;}
+    public final Piece getKeyPiece() {
+    	return pieces.contains(king) ? king : null;
+    }
     
     /** Add Pieces to this player's side. */
     public final void addPiece(Piece piece) {pieces.add(piece);}
     /** Add all Pieces in the provided set to this player's side. */
     public final void addPiece(Set<Piece> pieces) {this.pieces.addAll(pieces);}
+    /** Remove the specified Piece from this player. */
+    public final void delPiece(Piece piece) {pieces.remove(piece);}
     
     /** Return a set of this player's Pieces. */
     public final Set<Piece> getAllPieceAsSet() {return pieces;}
@@ -55,3 +50,4 @@ public class Player implements Serializable {
     /** Number of turns this player have taken. */
     public final int getTurn() {return turns;}
 }
+

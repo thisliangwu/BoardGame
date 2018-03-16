@@ -1,25 +1,32 @@
 package boardgame;
 
-import java.io.Serializable;
+import javafx.scene.layout.FlowPane;
 
-public class Board implements Serializable {
-    /** Board game size. */
-    public final int boardSize;
-    /** all the squares in this board game. */
-    private Square[][] squares;
-		
-	/**
-	 * Initialize the board base on the boardSize and game type.
-	 * @param boardSize
-	 * 				of the board game
-	 */
-	public Board(int boardSize) {
-		this.boardSize = boardSize;
-		squares = new Square[boardSize][boardSize];
-		for(int i = 0; i < squares.length; i++)
-			for(int j = 0; j < squares[i].length; j++)
-				squares[i][j] = new Square(i, j);
+/** Board game Board. */
+public abstract class Board extends FlowPane {
+	
+	protected Board() {
+		getStylesheets().add(getClass().getResource("../board-game.css").toExternalForm());
 	}
-	/** Return the board information. */
-	public Square[][] getBoard() { return squares; }
+
+	/** Move the Piece on the selected Square to the target Square. */
+	public abstract void movePiece(Square selected, Square target);
+	
+	/** Return the Square at the specified coordinate in the current board. */
+	public abstract Square getSquare(int X, int Y);
+	
+	/** Return the potential targets of the Piece on the selected Square as a Set. */
+	public abstract Square[] getTargets(Square selected);
+	
+	/** Check if there is obstacle between selected Square and the target Square
+	 * in the Vertical path path.*/
+	public abstract boolean isVerticalPathClear(Square selected, Square target);
+	
+	/**Check if there is obstacle between selected Square and the target Square
+	 * in the horizontal path.*/
+	public abstract boolean isHorizontalPathClear(Square selected, Square target);
+	
+	/**Check if there is obstacle between selected Square and the target Square
+	 * in the diagonal path. */
+	public abstract boolean isDiagonalPathClear(Square selected, Square target);
 }

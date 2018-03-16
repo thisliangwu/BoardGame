@@ -1,21 +1,26 @@
-package chessgame;
+package chessgame3d;
 
 import java.util.HashSet;
-import boardgame.*;
+import boardgame.Board;
+import boardgame.BoardGame;
+import boardgame.Piece;
+import boardgame.Player;
+import boardgame.Sides;
+import chessgame.ChessBoard;
 import pieces.*;
 
-/** Chess game. */
-public class ChessGame extends BoardGame {
-	private Board board;
+/** 3d chess game. */
+public class ChessGame3D extends BoardGame {
+
+	private ChessBoard3D board;
 	
-	/** Set up chess game with two players. */
-	public ChessGame(Player player1, Player player2) {
+	public ChessGame3D(Player player1, Player player2) {
 		super(player1, player2);
 	}
 
 	@Override
 	protected Board setBoard() {
-		board = new ChessBoard(this);
+		board = new ChessBoard3D(this);
         initializePiece(white);
         initializePiece(black);
         return board;
@@ -46,7 +51,7 @@ public class ChessGame extends BoardGame {
         p.addPiece(pieces);  //Add all pieces to to player.
         
         for(Piece piece : p.getAllPieceAsSet()) {
-        	board.getSquare(piece.getSquare().X, piece.getSquare().Y).setPiece(piece);
+        	board.boards[0].getSquare(piece.getSquare().X, piece.getSquare().Y).setPiece(piece);
         }
     }
 	

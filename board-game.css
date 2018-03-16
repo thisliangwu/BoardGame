@@ -22,3 +22,8 @@
     -fx-border-width: 1.5px;
     -fx-border-color: rgb(100, 93, 93);
 }
+
+.board-boarder {
+    -fx-border-width: 3px;
+    -fx-border-color: rgb(0, 17, 255);
+}
