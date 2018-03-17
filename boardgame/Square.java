@@ -55,8 +55,7 @@ public class Square extends Button {
             setGraphic(null);
         }  else {
             Image img = new Image(
-                    this.getClass().getResourceAsStream("../piece-img/"
-                    + piece.player.side + "-" + piece.name + ".png"));
+                    this.getClass().getResourceAsStream("../" + piece.getImageSrc()));
             setGraphic(new ImageView(img));
         }
     }

@@ -34,9 +34,10 @@ public abstract class BoardGame {
     public Player getCurrentPlayer() { return crp; }
     
     
-    /** Child class need to override this method set up the Pieces to 
-     * each player(setPieces), and setup the key Piece(setKeyPiece)
-     * as well as put them on the board with setPiece method.
+    /** Child class need to override this method set up the Pieces for
+     * each player(addPiece), and setup the key Piece(setKeyPiece)
+     * as well as put them on the target Square of the 
+     * Boards's getSquare().setPiece() method.
      */
     protected abstract Board setBoard();
     

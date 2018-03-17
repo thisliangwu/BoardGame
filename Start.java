@@ -1,6 +1,8 @@
 import boardgame.*;
 import chessgame.*;
 import chessgame3d.ChessGame3D;
+import chinesechess.ChineseChess;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -64,6 +66,7 @@ public class Start extends Application {
     	/** Menu Buttons. */
     	final Button chess = new Button("New Chess");
     	final Button chess3d = new Button("New Chess 3D");
+    	final Button cchess = new Button("New Chinese Chess");
     	final Button save = new Button("Save");
     	final Button resume = new Button("Load");
     	
@@ -86,10 +89,18 @@ public class Start extends Application {
                         new Player(Sides.BLACK));
                 buidBoard(boardGame);
             });
+
+//--------------------------------New Chess Game ----------------------------------------//    
+            cchess.setOnAction((e) ->{
+                boardGame = new ChineseChess(
+                        new Player(Sides.WHITE),
+                        new Player(Sides.BLACK));
+                buidBoard(boardGame);
+            });
             
             save.setOnAction(this::saveGame);
             resume.setOnAction(this::loadGame);
-            getChildren().addAll(chess, chess3d, save, resume);
+            getChildren().addAll(chess, chess3d, cchess, save, resume);
         }
         
 //--------------------------------- Save Game ------------------------------------------//         
@@ -126,12 +137,13 @@ public class Start extends Application {
                     boardGame = (BoardGame) oi.readObject();
                     oi.close();
                     fi.close(); 
+                    buidBoard(boardGame);
                 } catch(ClassNotFoundException ex) {
-                    ex.printStackTrace();
+//                    ex.printStackTrace();
                 } catch(IOException ex)  {
-                    ex.printStackTrace();
+//                    ex.printStackTrace();
                 }
-            buidBoard(boardGame);
+            
         }
         
         /**

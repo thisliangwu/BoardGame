@@ -1,4 +1,4 @@
-package pieces;
+package pieces.chess;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -30,4 +30,9 @@ public class Knight extends Piece {
             return xdif + ydif == 3;
         return false;
     }
+    
+    @Override
+	public String getImageSrc() {
+		return "piece-img/chess/" + player.side + "-" + name + ".png";
+	}
 }

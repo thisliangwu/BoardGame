@@ -1,12 +1,10 @@
 package boardgame;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /** Board game Player information. */
-public class Player implements Serializable {
+public class Player {
     /** white / black side. */
     public final Sides side;
     /** number of turn this Player have moved. */

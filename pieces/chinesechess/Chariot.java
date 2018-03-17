@@ -1,4 +1,4 @@
-package pieces;
+package pieces.chinesechess;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -6,15 +6,13 @@ import boardgame.Pieces;
 import boardgame.Player;
 import boardgame.Square;
 
-/** Rook Piece. */
-public class Rook extends Piece {
-
+public class Chariot extends Piece {
 	/** Initialize Rook Piece.
 	 * @param square the square this piece on.
 	 * @param player the player this piece belongs to.
 	 */
-	public Rook(Square square, Player player) {
-		super(Pieces.ROOK, square, player);
+	public Chariot(Square square, Player player) {
+		super(Pieces.CHARIOT, square, player);
 	}
 
 	@Override
@@ -22,6 +20,11 @@ public class Rook extends Piece {
 		return isValidSquare(target) 
 				&& (board.isHorizontalPathClear(getSquare(), target)
 				|| board.isVerticalPathClear(getSquare(), target));
+	}
+
+	@Override
+	public String getImageSrc() {
+		return "piece-img/chinesechess/" + player.side + "-" + name + ".png";
 	}
 
 }

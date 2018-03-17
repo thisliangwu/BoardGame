@@ -1,4 +1,4 @@
-package pieces;
+package pieces.chess;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -27,4 +27,9 @@ public class King extends Piece {
         return Math.abs(getSquare().X - t.X) < 2 
                 && Math.abs(getSquare().Y - t.Y) < 2;
     }
+    
+    @Override
+	public String getImageSrc() {
+		return "piece-img/chess/" + player.side + "-" + name + ".png";
+	}
 }

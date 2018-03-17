@@ -37,7 +37,7 @@ public class ChessBoard3D extends Board {
 	
 	@Override
 	public void movePiece(Square selected, Square target) {
-		selected.getPiece().setSquare(target);
+		selected.getPiece().MoveToSquare(target);
 		selected.setPiece(null);
 	}
 

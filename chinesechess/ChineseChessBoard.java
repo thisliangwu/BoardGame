@@ -1,26 +1,26 @@
-package chessgame;
+package chinesechess;
 
 import java.util.ArrayList;
-import javafx.scene.layout.GridPane;
+
 import boardgame.Board;
 import boardgame.BoardGame;
 import boardgame.MoveHandler;
 import boardgame.Piece;
 import boardgame.Square;
+import javafx.scene.layout.GridPane;
 
-/** Chess board for chess game. */
-public class ChessBoard extends Board {
-	/** Chess Board Size. */
-	public static final int BOARDSIZE = 8;
-	/** Squares. */
+public class ChineseChessBoard extends Board {
+
+	public static final int WIDTH = 9;
+	public static final int LENGTH = 10;
 	public final Square[][] sqrs;
 	
 	/**
 	 * Initialize a chess board.
 	 * @param bg chess game this board belongs to
 	 */
-	public ChessBoard(BoardGame bg) {
-		sqrs = new Square[BOARDSIZE][BOARDSIZE];
+	public ChineseChessBoard(BoardGame bg) {
+		sqrs = new Square[WIDTH][LENGTH];
 		GridPane pane = new GridPane();
 		getChildren().add(pane);
 		

@@ -1,4 +1,4 @@
-package pieces;
+package pieces.chess;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -21,5 +21,10 @@ public class Bishop extends Piece {
 	public boolean isValidMove(Square target, Board board) {
 		return isValidSquare(target) 
 				&& board.isDiagonalPathClear(getSquare(), target);
+	}
+
+	@Override
+	public String getImageSrc() {
+		return "piece-img/chess/" + player.side + "-" + name + ".png";
 	}
 }

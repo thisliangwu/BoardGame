@@ -1,7 +1,5 @@
 package boardgame;
 
-import java.io.Serializable;
-
 /** The Piece class is an abstract class that store the information
  * of this Piece along with getter method.
  * This movable method  only validate if the target and the selected piece 
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * Subclass should override this movable method and also call super.movable
  * method to calculate if this Piece can be moved to the target Square.
  */
-public abstract class Piece implements Serializable {
+public abstract class Piece {
 	/** Name of this Piece. */  
 	public final Pieces name;
 	/** Side of this Piece.  */
@@ -24,8 +22,8 @@ public abstract class Piece implements Serializable {
 		this.player = player;
 	}
 	
-	/** Set the Square this Piece is on. */
-	public void setSquare(Square square) {
+	/** Move this piece to the target Square. */
+	public void MoveToSquare(Square square) {
 		this.square = square; 
 		steps++;
 		square.setPiece(this);
@@ -43,4 +41,6 @@ public abstract class Piece implements Serializable {
 	protected boolean isValidSquare(Square target) {
 		return target.getPiece() == null || target.getPiece().player != player;
 	}
+	
+	public abstract String getImageSrc();
 }

@@ -1,4 +1,4 @@
-package pieces;
+package pieces.chess;
 
 import boardgame.Board;
 import boardgame.Piece;
@@ -33,5 +33,10 @@ public class Pawn extends Piece {
 				return (ydif >= -2 && ydif < 0) && board.isVerticalPathClear(getSquare(), target);
 			return ydif == -1 && board.isVerticalPathClear(getSquare(), target);
 		}
+	}
+	
+	@Override
+	public String getImageSrc() {
+		return "piece-img/chess/" + player.side + "-" + name + ".png";
 	}
 }
