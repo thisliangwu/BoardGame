@@ -4,6 +4,7 @@ import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Pieces;
 import boardgame.Player;
+import boardgame.Sides;
 import boardgame.Square;
 
 public class Soldier extends Piece {
@@ -14,8 +15,23 @@ public class Soldier extends Piece {
 
 	@Override
 	public boolean isValidMove(Square target, Board board) {
-		// TODO Auto-generated method stub
-		return false;
+		return isValidSquare(target) && basicMove(target, board);
+	}
+	
+	/** One step forward or one step aside after crossing river. */
+	private boolean basicMove(Square target, Board board) {
+		int xdif = target.X - getSquare().X, ydif = target.Y - getSquare().Y;
+		boolean ver = false, hor = false;
+		
+		if(player.side == Sides.WHITE)
+			ver = ydif == 1;
+		else
+			ver = ydif == -1;
+		ver = ver && board.isVerticalPathClear(getSquare(), target); 
+		hor = getSteps() > 1 /* Cross river only. */
+				&& xdif == 1 && board.isHorizontalPathClear(getSquare(), target);  
+		
+		return ver || hor;
 	}
 
 	@Override

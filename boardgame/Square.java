@@ -37,6 +37,26 @@ public class Square extends Button {
         setPrefHeight(SQRSIZE);
 	}
 	
+	/** Return the Square on the left (X - 1) side of this Square in the board. */
+	public Square getLeftSquare(Board board) {
+		return board.getSquare(X - 1, Y);
+	}
+	
+	/** Return the Square on the right (X + 1) side of this Square in the board. */
+	public Square getRightSquare(Board board) {
+		return board.getSquare(X + 1, Y);
+	}
+	
+	/** Return the Square above(Y - 1) this Square in the board. */
+	public Square getUpSquare(Board board) {
+		return board.getSquare(X, Y - 1);
+	}
+	
+	/** Return the Square below (Y + 1) this Square in the board. */
+	public Square getDownSquare(Board board) {
+		return board.getSquare(X, Y + 1);
+	}
+	
     /** Add the specified css class to the Square. */
     final void toggleOn(String cssClass) {    
         getStyleClass().add(cssClass);

@@ -24,6 +24,7 @@ public class Advisor extends Piece {
 		return  isValidSquare(target)  && basicMove(target, board);
 	}
 
+	/** One step in the diagonal path within the Rectangle. */
 	private boolean basicMove(Square target, Board board) {
 		return  Math.abs(target.X - X) < 2 && Math.abs(target.Y - Y) < 3 /* Move within Rectangle.  */
 				&&  Math.abs(target.X - getSquare().X) == 1  /* One step at a time. */

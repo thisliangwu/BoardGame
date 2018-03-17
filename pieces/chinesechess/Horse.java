@@ -14,15 +14,24 @@ public class Horse extends Piece {
 
 	@Override
 	public boolean isValidMove(Square target, Board board) {
-		return isValidSquare(target) && jumpable(target);
+		return isValidSquare(target) && basicMove(target, board);
 	}
-	
-    /** Knight special move.*/
-    private boolean jumpable(Square t) {
-        int xdif = Math.abs(getSquare().X - t.X);
-        int ydif = Math.abs(getSquare().Y - t.Y);
-        if (xdif < 3 && ydif < 3)
-            return xdif + ydif == 3;
+
+    private boolean basicMove(Square t, Board board) {
+        int xdif = t.X - getSquare().X;
+        int ydif = t.Y - getSquare().Y;
+        if(Math.abs(xdif) + Math.abs(ydif) != 3)
+        	return false;
+        /* Obstacle ahead can't jump */
+        	if(xdif == -2) /* left move */
+                return getSquare().getLeftSquare(board).getPiece() == null;
+            if(xdif == 2) /* right move */
+            	return getSquare().getRightSquare(board).getPiece() == null;
+            if(ydif == -2) /* up move */
+            	return getSquare().getUpSquare(board).getPiece() == null;
+            if(ydif == 2) /* down move */
+            	return getSquare().getDownSquare(board).getPiece() == null;
+            
         return false;
     }
 

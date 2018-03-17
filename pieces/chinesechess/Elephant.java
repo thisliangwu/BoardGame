@@ -24,6 +24,7 @@ public class Elephant extends Piece {
 		return  isValidSquare(target)  && basicMove(target, board);
 	}
 	
+	/** Move 2 steps diagonal within boundary. */
 	private boolean basicMove(Square target, Board board) {
 		return  Math.abs(target.Y - Y) < 5 /* Move within Rectangle.  */
 				&&  Math.abs(target.X - getSquare().X) == 2  /* diagonal 2 step at a time. */
