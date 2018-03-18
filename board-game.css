@@ -1,29 +1,51 @@
 .grey-square {
-    -fx-background-color: rgb(192, 192, 192);
+    -fx-background-color: rgb(192, 192, 192)
 }
 
 .white-square {
     -fx-background-color: #FFF;
 }
 
-.selected {
+.green-square {
+    -fx-background-color: #769656;
+    -fx-border-width: 1.5px;
+    -fx-border-color: rgb(100, 93, 93);
+}
+
+.yellow-square{
+    -fx-background-color: #eeeed2;
+    -fx-border-width: 1.5px;
+    -fx-border-color: rgb(100, 93, 93);
+}
+
+.chess-selected {
     /* -fx-background-color: #84a0c5; */
     -fx-background-color: red;
 }
 
-.path {
+.chess-target {
     /* -fx-accent: #0093ff;*/
     /* -fx-focus-color: #0093ff; */
+    
     -fx-border-color: red;
     -fx-border-width: 1.5px;
-}
-
-.default-border {
-    -fx-border-width: 1.5px;
-    -fx-border-color: rgb(100, 93, 93);
 }
 
 .board-boarder {
     -fx-border-width: 3px;
     -fx-border-color: rgb(0, 17, 255);
+}
+
+.transparent-bg {
+    -fx-background-color: transparent;
+}
+
+.board-background {
+    -fx-background-image: url("./img/chineseboard.png");
+}
+
+.cn-chess-target {
+    -fx-background-image: url("./img/target.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }

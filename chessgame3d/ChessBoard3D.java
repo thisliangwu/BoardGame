@@ -1,7 +1,7 @@
 package chessgame3d;
 
 import java.util.ArrayList;
-
+import javafx.geometry.Insets;
 import boardgame.Board;
 import boardgame.BoardGame;
 import boardgame.Square;
@@ -28,9 +28,9 @@ public class ChessBoard3D extends Board {
 		
 		for(int i = 0; i < BOARDSET; i++) {
 			ChessBoard b = new ChessBoard(bg);
-			b.getStyleClass().add("board-boarder");
 			boards[i] = b;
 			pane.getChildren().add(b);
+			HBox.setMargin(b,new Insets(Square.SQRSIZE*(BOARDSET-i-1), BOARDSET, 0, BOARDSET));
 		}
 		board = boards[0];
 	}

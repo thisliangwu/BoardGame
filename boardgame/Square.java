@@ -11,7 +11,10 @@ import javafx.scene.image.ImageView;
  * in the Board class, which are used by the isClearPath method in the
  * Board class.
  */
-public class Square extends Button {
+public abstract class Square extends Button {
+	protected enum Toggle {
+		SELECTED, TARGET
+	}
 	/** Square dimension. */
     public static final int SQRSIZE = 55;
     /** Square X coordinate. */
@@ -25,14 +28,6 @@ public class Square extends Button {
 	public Square(int x, int y) {
 		X = x;
 		Y = y;
-		
-		if ((X + Y) % 2 == 0) {
-            toggleOn("grey-square");
-            toggleOn("default-border");
-        } else {
-            toggleOn("white-square");
-            toggleOn("default-border");
-        }
         setPrefWidth(SQRSIZE);
         setPrefHeight(SQRSIZE);
 	}
@@ -58,14 +53,9 @@ public class Square extends Button {
 	}
 	
     /** Add the specified css class to the Square. */
-    final void toggleOn(String cssClass) {    
-        getStyleClass().add(cssClass);
-    }
-    
+    protected abstract void toggleOn(Toggle t);
     /** Remove the specified css class from the Square. */
-    final void toggleOff(String cssClass) {
-        getStyleClass().removeAll(cssClass);
-    }
+    protected abstract void toggleOff(Toggle t);
     
     /** Move the provided Piece on this Square. */
     public void setPiece(Piece piece) {

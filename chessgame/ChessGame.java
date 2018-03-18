@@ -8,6 +8,7 @@ import pieces.chess.Knight;
 import pieces.chess.Pawn;
 import pieces.chess.Queen;
 import pieces.chess.Rook;
+import javafx.scene.control.ChoiceDialog;
 
 /** Chess game. */
 public class ChessGame extends BoardGame {
@@ -64,4 +65,65 @@ public class ChessGame extends BoardGame {
 		return false;
 	}
 
+    @Override
+	public void endTurn(Square selected, Square target) {
+    	Piece piece = selected.getPiece();
+    	if(piece instanceof Pawn) {
+            pawnFirstMove((Pawn)piece);
+            pawnEnpassant((Pawn)piece, target);
+            promotion((Pawn)piece);
+    	}
+//    	if(piece instanceof King)
+//    		kingCastling(selected, target);
+        super.endTurn(selected, target);
+    }
+    
+    /** Check and record the player turn when the pawn first move
+     * for enpassant calculation. */
+    private void pawnFirstMove(Pawn pawn) {
+        if (pawn.getSteps() == 0) 
+            pawn.setMoveTurn(pawn.player.getTurn());
+    }
+    
+    /**CHeck and Perform pawn enpassant.  */
+    private void pawnEnpassant(Pawn pawn, Square target) {
+        if (pawn.enpassant(target, board)) {
+            board.getSquare(target.X, pawn.getSquare().Y).setPiece(null);
+        }
+    }
+    
+    /** Dialog box for receiving promotion information. */
+    private void promotion(Pawn pawn) {
+    	Player p = pawn.player; /* Condition to be promoted. */
+    	int ycor = p == white ?  6 : 1; 
+    	if((p != white || pawn.getSquare().Y != ycor) 
+    			&& (p != black || pawn.getSquare().Y != ycor))
+    		return;
+    	
+    	Pieces choices[] = {Pieces.QUEEN, Pieces.KNIGHT, Pieces.ROOK, Pieces.BISHOP};
+    	ChoiceDialog<Pieces> dialog = new ChoiceDialog<>(choices[0], choices);
+    	
+    	dialog.setTitle("Promotion");
+    	dialog.setHeaderText("Select the promote type");
+    	Pieces res  = dialog.showAndWait().orElse(null);
+    	if(res == null)
+    		return;  /* Pick nothing. remain Pawn. */  	
+    	
+    	Square ts = pawn.getSquare();
+    	Piece piece = null;
+    	switch(res) {
+    		case QUEEN:
+    			piece = new Queen(ts, pawn.player); break;
+	    	case KNIGHT:
+	    		piece = new Knight(ts, pawn.player); break;
+	    	case ROOK:
+	    		piece = new Rook(ts, pawn.player); break;
+	    	case BISHOP:
+	    		piece = new Bishop(ts, pawn.player); break;
+	    	default:		
+    	}
+    	pawn.player.addPiece(piece); /* Change the player's Piece bracket */
+    	pawn.player.delPiece(pawn);
+		piece.getSquare().setPiece(piece);
+    }
 }

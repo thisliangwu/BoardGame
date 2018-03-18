@@ -2,7 +2,6 @@ import boardgame.*;
 import chessgame.*;
 import chessgame3d.ChessGame3D;
 import chinesechess.ChineseChess;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,13 +9,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.HBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sound.Sound;
 import javafx.event.ActionEvent;
@@ -37,11 +34,11 @@ public class Start extends Application {
         
         root = new FlowPane(new Menu());
         Scene scene = new Scene(root);
-
+        
         this.stage = stage;
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX(primScreenBounds.getWidth() / 5); 
-        stage.setY(primScreenBounds.getHeight() / 5);
+//        Rectangle2D screenSzie = Screen.getPrimary().getVisualBounds();
+//        stage.setX(screenSzie.getWidth() * 0.05); 
+//        stage.setY(screenSzie.getHeight() * 0.1);
         
         stage.setTitle("Board Game");
         stage.setScene(scene);
@@ -168,6 +165,7 @@ public class Start extends Application {
             } catch(IndexOutOfBoundsException ex) {}	            
             root.getChildren().add(bg.board);
             stage.sizeToScene();
+            stage.centerOnScreen();
         }
     }
 }

@@ -33,6 +33,6 @@ public class Knight extends Piece {
     
     @Override
 	public String getImageSrc() {
-		return "piece-img/chess/" + player.side + "-" + name + ".png";
+		return "img/chess/" + player.side + "-" + name + ".png";
 	}
 }

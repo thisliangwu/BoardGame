@@ -26,7 +26,7 @@ public class ChessBoard extends Board {
 		
 		for(int i = 0; i < sqrs.length; i++)
 			for(int j = 0; j < sqrs[i].length; j++) {
-				Square s = new Square(i, j);
+				Square s = new ChessSquare(i, j);
 				s.setOnAction(new MoveHandler(bg));
 				sqrs[i][j] = s;
 				pane.add(s, i, j);

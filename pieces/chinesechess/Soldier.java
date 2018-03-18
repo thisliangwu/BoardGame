@@ -36,7 +36,7 @@ public class Soldier extends Piece {
 
 	@Override
 	public String getImageSrc() {
-		return "piece-img/chinesechess/" + player.side + "-" + name + ".png";
+		return "img/chinesechess/" + player.side + "-" + name + ".png";
 	}
 
 }

@@ -23,10 +23,10 @@ public class ChineseChessBoard extends Board {
 		sqrs = new Square[WIDTH][LENGTH];
 		GridPane pane = new GridPane();
 		getChildren().add(pane);
-		
+		getStyleClass().add("board-background"); /* board background pic */
 		for(int i = 0; i < sqrs.length; i++)
 			for(int j = 0; j < sqrs[i].length; j++) {
-				Square s = new Square(i, j);
+				Square s = new ChineseSquare(i, j);
 				s.setOnAction(new MoveHandler(bg));
 				sqrs[i][j] = s;
 				pane.add(s, i, j);

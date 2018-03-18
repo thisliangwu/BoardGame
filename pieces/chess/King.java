@@ -19,7 +19,7 @@ public class King extends Piece {
 
 	@Override
 	public boolean isValidMove(Square target, Board board) {
-		return isValidSquare(target) && basicMove(target);
+		return isValidSquare(target) && (basicMove(target) || castling(target, board));
 	}
 
     /** King regular one pace move check */
@@ -28,8 +28,13 @@ public class King extends Piece {
                 && Math.abs(getSquare().Y - t.Y) < 2;
     }
     
+    /** return true or false if the king can perform king castling.*/
+    public boolean castling(Square target, Board board) {
+    	return false;
+    }
+    
     @Override
 	public String getImageSrc() {
-		return "piece-img/chess/" + player.side + "-" + name + ".png";
+		return "img/chess/" + player.side + "-" + name + ".png";
 	}
 }

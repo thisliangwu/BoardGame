@@ -32,7 +32,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
 	                selected = click;
 	                pathOn();  
 	            }
-            } catch(Exception ex){ /* click on empty or border squares . */}
+            } catch(NullPointerException ex){ /* click on empty squares .*/}
             
         } else { //try to move the selected Piece
             if(selected == click) { //double click the Piece to cancel select.
@@ -71,22 +71,18 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     
     /** Highlight Selected Square and potential targets. */
     private void pathOn() {
-        selected.toggleOn("selected");
+        selected.toggleOn(Square.Toggle.SELECTED);
     	targets = boardGame.board.getTargets(selected);
-    	for (Square t : targets) {
-            t.toggleOff("default-border");
-            t.toggleOn("path");
-        }  
+    	for (Square t : targets) 
+            t.toggleOn(Square.Toggle.TARGET);
     }
     
     /**Remove the highlight Selected Square and potential targets.*/
     private void pathOff() {
-        selected.toggleOff("selected");
+        selected.toggleOff(Square.Toggle.SELECTED);
         selected = null;
         if(targets != null)
-        	for (Square t : targets) {
-        		t.toggleOff("path"); 
-        		t.toggleOn("default-border");
-            }      
+        	for (Square t : targets)
+        		t.toggleOff(Square.Toggle.TARGET);
     }
 }
