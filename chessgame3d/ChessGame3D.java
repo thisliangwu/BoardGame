@@ -7,12 +7,7 @@ import boardgame.Piece;
 import boardgame.Player;
 import boardgame.Sides;
 import chessgame.ChessBoard;
-import pieces.chess.Bishop;
-import pieces.chess.King;
-import pieces.chess.Knight;
-import pieces.chess.Pawn;
-import pieces.chess.Queen;
-import pieces.chess.Rook;
+import pieces.chess.*;
 
 /** 3d chess game. */
 public class ChessGame3D extends BoardGame {

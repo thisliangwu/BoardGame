@@ -7,13 +7,7 @@ import boardgame.BoardGame;
 import boardgame.Piece;
 import boardgame.Player;
 import boardgame.Sides;
-import pieces.chinesechess.Advisor;
-import pieces.chinesechess.Cannon;
-import pieces.chinesechess.Chariot;
-import pieces.chinesechess.Elephant;
-import pieces.chinesechess.General;
-import pieces.chinesechess.Horse;
-import pieces.chinesechess.Soldier;
+import pieces.chinesechess.*;
 
 public class ChineseChess extends BoardGame {
 	private Board board;

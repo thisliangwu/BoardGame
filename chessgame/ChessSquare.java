@@ -6,7 +6,6 @@ public class ChessSquare extends Square {
 
 	public ChessSquare(int x, int y) {
 		super(x, y);
-		
 		if ((X + Y) % 2 == 0) {
 			getStyleClass().add("yellow-square");
 

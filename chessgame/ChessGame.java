@@ -2,12 +2,7 @@ package chessgame;
 
 import java.util.HashSet;
 import boardgame.*;
-import pieces.chess.Bishop;
-import pieces.chess.King;
-import pieces.chess.Knight;
-import pieces.chess.Pawn;
-import pieces.chess.Queen;
-import pieces.chess.Rook;
+import pieces.chess.*;
 import javafx.scene.control.ChoiceDialog;
 
 /** Chess game. */

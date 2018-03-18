@@ -1,4 +1,5 @@
 import boardgame.*;
+import checker.CheckerGame;
 import chessgame.*;
 import chessgame3d.ChessGame3D;
 import chinesechess.ChineseChess;
@@ -61,9 +62,10 @@ public class Start extends Application {
     	/** Save and Load game file chooser. */
     	FileChooser fileChooser;
     	/** Menu Buttons. */
-    	final Button chess = new Button("New Chess");
-    	final Button chess3d = new Button("New Chess 3D");
-    	final Button cchess = new Button("New Chinese Chess");
+    	final Button chess = new Button("Chess");
+    	final Button chess3d = new Button("Chess 3D");
+    	final Button cchess = new Button("Chinese Chess");
+    	final Button checker = new Button("Checker");
     	final Button save = new Button("Save");
     	final Button resume = new Button("Load");
     	
@@ -79,7 +81,7 @@ public class Start extends Application {
                 buidBoard(boardGame);
             });
 
-//--------------------------------New Chess Game ----------------------------------------//    
+//-------------------------------New Chess 3d Game ---------------------------------------//    
             chess3d.setOnAction((e) ->{
                 boardGame = new ChessGame3D(
                         new Player(Sides.WHITE),
@@ -87,17 +89,24 @@ public class Start extends Application {
                 buidBoard(boardGame);
             });
 
-//--------------------------------New Chess Game ----------------------------------------//    
+//-----------------------------New Chinese Chess Game -------------------------------------//    
             cchess.setOnAction((e) ->{
                 boardGame = new ChineseChess(
                         new Player(Sides.WHITE),
                         new Player(Sides.BLACK));
                 buidBoard(boardGame);
             });
-            
+ 
+//--------------------------------New Checker Game ---------------------------------------//    
+            checker.setOnAction((e) ->{
+                boardGame = new CheckerGame(
+                        new Player(Sides.WHITE),
+                        new Player(Sides.BLACK));
+                buidBoard(boardGame);
+            });
             save.setOnAction(this::saveGame);
             resume.setOnAction(this::loadGame);
-            getChildren().addAll(chess, chess3d, cchess, save, resume);
+            getChildren().addAll(chess, chess3d, cchess, checker, save, resume);
         }
         
 //--------------------------------- Save Game ------------------------------------------//         

@@ -1,7 +1,6 @@
 package chinesechess;
 
 import java.util.ArrayList;
-
 import boardgame.Board;
 import boardgame.BoardGame;
 import boardgame.MoveHandler;

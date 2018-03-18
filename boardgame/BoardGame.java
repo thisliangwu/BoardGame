@@ -52,8 +52,9 @@ public abstract class BoardGame {
         return crp == player;
     }
     
-    /** Move the selected Piece to the target Square and end this player's
-     * turn.
+    /** Move the selected Piece to the target Square, try to delete the piece
+     * of the target Square from the opponent player's bracket and end 
+     * the current player's turn.
      * Child class should override this method to perform special check
      * before calling super.enTurn method.
      * @param selected
@@ -66,7 +67,6 @@ public abstract class BoardGame {
     		target.getPiece().player.delPiece(target.getPiece());
     	} catch (NullPointerException ex) {/* target square has no piece */}
         board.movePiece(selected, target);
-        
         if (crp == white) { //switch move side
             white.endTurn();
             crp = black;
