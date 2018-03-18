@@ -7,6 +7,7 @@ import boardgame.BoardGame;
 import boardgame.Piece;
 import boardgame.Player;
 import boardgame.Sides;
+import boardgame.Square;
 import pieces.chinesechess.*;
 
 public class ChineseChess extends BoardGame {
@@ -65,6 +66,11 @@ public class ChineseChess extends BoardGame {
 			if(p.isValidMove(player.getKeyPiece().getSquare(), board))
 				return true;
 		return false;
+	}
+
+	@Override
+	public Square[] getTargets(Square selected) {
+		return board.getTargets(selected);
 	}
 
 }

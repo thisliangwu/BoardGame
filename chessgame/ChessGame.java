@@ -1,9 +1,11 @@
 package chessgame;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import boardgame.*;
 import pieces.chess.*;
 import javafx.scene.control.ChoiceDialog;
+import static chessgame.ChessBoard.BOARDSIZE;
 
 /** Chess game. */
 public class ChessGame extends BoardGame {
@@ -28,10 +30,10 @@ public class ChessGame extends BoardGame {
      */
     private void initializePiece(Player p) {
     	HashSet<Piece> pieces = new HashSet<>();
-        int pawnLine = p.side == Sides.WHITE ? 1 : ChessBoard.BOARDSIZE - 2;
-        int kingLine = p.side == Sides.WHITE ? 0 : ChessBoard.BOARDSIZE - 1;
+        int pawnLine = p.side == Sides.WHITE ? 1 : BOARDSIZE - 2;
+        int kingLine = p.side == Sides.WHITE ? 0 : BOARDSIZE - 1;
         
-        for (int i = 0; i < ChessBoard.BOARDSIZE; i++) {
+        for (int i = 0; i < BOARDSIZE; i++) {
           pieces.add(new Pawn(board.getSquare(i, pawnLine), p));
         }
         King king = new King(board.getSquare(3, kingLine), p);
@@ -68,8 +70,8 @@ public class ChessGame extends BoardGame {
             pawnEnpassant((Pawn)piece, target);
             promotion((Pawn)piece);
     	}
-//    	if(piece instanceof King)
-//    		kingCastling(selected, target);
+    	if(piece instanceof King)
+    		kingCastling((King)piece, target);
         super.endTurn(selected, target);
     }
     
@@ -121,4 +123,32 @@ public class ChessGame extends BoardGame {
     	pawn.player.delPiece(pawn);
 		piece.getSquare().setPiece(piece);
     }
+
+	@Override
+	public Square[] getTargets(Square selected) {
+		ArrayList<Square> res = new ArrayList<>();
+		for(int i = 0; i < BOARDSIZE; i++)
+			for(int j = 0; j < BOARDSIZE; j++)
+				if(selected.getPiece().isValidMove(board.getSquare(i, j), this)) 
+					res.add(board.getSquare(i, j));		
+		return res.toArray(new Square[0]);
+	}
+	
+	 /**Perform king castling. */
+    private void kingCastling(King king, Square target) {
+        int x = king.getSquare().X,  X = target.X,   l = X - 1,   r = X + 1,   y = target.Y;
+        
+    	try {
+	    		Square right = board.getSquare(r, y), left = board.getSquare(l, y);
+	        if (X < x && king.leftCastling(target, this)) { //left castling
+	            right.setPiece(left.getPiece());
+	            left.setPiece(null);
+	        }
+	        if (X > x && king.rightCastling(target, this)) { //right castling
+	        	left.setPiece(right.getPiece());
+	        	right.setPiece(null);
+	        }
+    	} catch(ArrayIndexOutOfBoundsException ex) {/* King is moving to border.*/} 
+    }
+    
 }

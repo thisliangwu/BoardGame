@@ -1,5 +1,6 @@
 package checker;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import boardgame.*;
 import chessgame.ChessBoard;
@@ -55,6 +56,11 @@ public class CheckerGame extends BoardGame {
     	}
     	super.endTurn(selected, target);
     }
+    
+	@Override
+	public Square[] getTargets(Square selected) {
+		return board.getTargets(selected);
+	}
     
     @Override
 	public boolean isChecked(Player player) {

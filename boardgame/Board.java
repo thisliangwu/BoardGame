@@ -15,7 +15,7 @@ public abstract class Board extends FlowPane {
 	/** Return the Square at the specified coordinate in the current board. */
 	public abstract Square getSquare(int X, int Y);
 	
-	/** Return the potential targets of the Piece on the selected Square as a Set. */
+	/** Return the potential targets of the Piece on the selected Square as an array. */
 	public abstract Square[] getTargets(Square selected);
 	
 	/** Check if there is obstacle between selected Square and the target Square

@@ -21,6 +21,8 @@ public class MoveHandler implements EventHandler<ActionEvent> {
      */
     public MoveHandler(BoardGame bg) {
         boardGame = bg;
+        selected = null;
+        targets = null;
     }
     
     @Override
@@ -46,7 +48,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
                 pathOn();
                 return;
             }
-            if(selected.getPiece().isValidMove(click, boardGame.board)) {
+            if(selected.getPiece().isValidMove(click, boardGame)) {
             	boardGame.endTurn(selected, click);
             	moveSound(click);
             }
@@ -72,7 +74,7 @@ public class MoveHandler implements EventHandler<ActionEvent> {
     /** Highlight Selected Square and potential targets. */
     private void pathOn() {
         selected.toggleOn(Square.Toggle.SELECTED);
-    	targets = boardGame.board.getTargets(selected);
+    	targets = boardGame.getTargets(selected);
     	for (Square t : targets) 
             t.toggleOn(Square.Toggle.TARGET);
     }

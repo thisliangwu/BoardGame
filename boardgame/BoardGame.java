@@ -44,6 +44,9 @@ public abstract class BoardGame {
     /** Check if the specified Player is being checked. */
     public abstract boolean isChecked(Player player);
     
+	/** Return the potential targets of the Piece on the selected Square as an array. */
+	public abstract Square[] getTargets(Square selected);
+    
     /** Check if the target player is in turn to move. 
      * @param player target player 
      * @return true or false the target player is in turn to move

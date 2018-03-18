@@ -6,6 +6,7 @@ import boardgame.BoardGame;
 import boardgame.Piece;
 import boardgame.Player;
 import boardgame.Sides;
+import boardgame.Square;
 import chessgame.ChessBoard;
 import pieces.chess.*;
 
@@ -54,7 +55,7 @@ public class ChessGame3D extends BoardGame {
         	board.boards[0].getSquare(piece.getSquare().X, piece.getSquare().Y).setPiece(piece);
         }
     }
-	
+    
     @Override
 	public boolean isChecked(Player player) {
 		Player opo = player == white ? black : white;
@@ -62,6 +63,11 @@ public class ChessGame3D extends BoardGame {
 			if(p.isValidMove(player.getKeyPiece().getSquare(), board))
 				return true;
 		return false;
+	}
+
+	@Override
+	public Square[] getTargets(Square selected) {
+		return board.getTargets(selected);
 	}
 
 }

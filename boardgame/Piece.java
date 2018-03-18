@@ -33,6 +33,16 @@ public abstract class Piece {
 	/** Return the Steps this Piece has moved. */
 	public int getSteps() {return steps;}
 	
+	/** Return whether the target Square on the board game is a valid move 
+	 * for this Piece. 
+	 * returning the result of the overload version with Board.
+	 * Child class can override this method to provides more accurate check
+	 * with the information in Board game.(eg: player)
+	 */
+	public boolean isValidMove(Square target, BoardGame boardGame) {
+		return isValidMove(target, boardGame.board);
+	}
+	
 	/** Return whether the target Square on the provided board is a valid move 
 	 * for this Piece. */
 	public abstract boolean isValidMove(Square target, Board board);
