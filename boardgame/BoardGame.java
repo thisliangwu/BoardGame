@@ -65,7 +65,7 @@ public abstract class BoardGame {
      * @param target
      *              the target Square that the selected Piece move to
      */
-    public void endTurn(Square selected, Square target) { 
+    public boolean endTurn(Square selected, Square target) { 
     	try {
     		target.getPiece().player.delPiece(target.getPiece());
     	} catch (NullPointerException ex) {/* target square has no piece */}
@@ -77,5 +77,6 @@ public abstract class BoardGame {
             black.endTurn();
             crp = white;
         }
+        return true;
     } 
 }

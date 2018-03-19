@@ -1,6 +1,5 @@
 package checker;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import boardgame.*;
 import chessgame.ChessBoard;
@@ -45,16 +44,40 @@ public class CheckerGame extends BoardGame {
     }
 	
     @Override
-    public void endTurn(Square selected, Square target) {
-    	Piece piece = selected.getPiece();
-    	if((piece.player == white && target.Y == BOARDSIZE-1)
-    			|| (piece.player == black && target.Y == 0)) {
-    		Piece promo = new King(selected, piece.player);
-    		piece.player.addPiece(promo);
-    		piece.player.delPiece(piece);
-    		promo.getSquare().setPiece(promo);
+    public boolean endTurn(Square selected, Square target) {
+    	/* promotion if the selected piece reach the other end */
+    	promote(selected.getPiece(), target);
+    	/* if capture successfully, the selected piece move again */
+    	if(capture(selected, target)) {
+    		
     	}
-    	super.endTurn(selected, target);
+    	return super.endTurn(selected, target);
+    }
+    
+    /** Return true or false the provide men piece is promoted to king piece. */
+    private boolean promote(Piece men, Square target) {
+    	if((men.player == white && target.Y == BOARDSIZE - 1)
+    			|| (men.player == black && target.Y == 0)) {
+    		Piece king = new King(men.getSquare(), men.player);
+    		men.player.addPiece(king);
+    		men.player.delPiece(men);
+    		king.getSquare().setPiece(king);
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /** Return true or false the middle piece is capture. */
+    private boolean capture(Square selected, Square target) {
+    	Piece piece = selected.getPiece();
+    	if(piece instanceof Men && ((Men) piece).isCapture(target, board)
+    			|| piece instanceof King && ((King) piece).isCapture(target, board)) {
+    		Piece capture =  board.getSquare((selected.X + target.X) / 2, (selected.Y + target.Y) / 2).getPiece();
+    		capture.player.delPiece(capture);
+    		capture.getSquare().setPiece(null);
+    		return true; 
+    	}
+    	return false;
     }
     
 	@Override

@@ -21,16 +21,24 @@ public class Men extends Piece {
 		else
 			dir = target.Y - getSquare().Y < 0; 
 		return isValidSquare(target) && dir /* target square not the same side & right direction */
-				&& (basicMove(target, board) || capture(target, board));
+				&& (basicMove(target, board) || isCapture(target, board));
 	}
-
+	
+	/** Move 1 step diagonal. */
 	private boolean basicMove(Square target, Board board) {
 		return Math.abs(target.Y - getSquare().Y) == 1 
+				&& target.getPiece() == null
 				&& board.isDiagonalPathClear(getSquare(), target);
 	}
 	
-	private boolean capture(Square target, Board board) {
-		return false;
+	/** Move 2 steps diagonal and capture the middle piece.  */
+	public boolean isCapture(Square target, Board board) {
+		int x = getSquare().X, y = getSquare().Y, tx = target.X, ty = target.Y;
+		try {
+			return Math.abs(ty - y) == 2 && Math.abs(tx - x) == 2
+					&& target.getPiece() == null
+					&& board.getSquare((tx + x) / 2, (ty + y) / 2).getPiece().player != player;
+		} catch(NullPointerException ex) {return false; /* empty square in the middle. */}
 	}
 	
 	@Override

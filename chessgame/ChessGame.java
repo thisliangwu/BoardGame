@@ -63,7 +63,7 @@ public class ChessGame extends BoardGame {
 	}
 
     @Override
-	public void endTurn(Square selected, Square target) {
+	public boolean endTurn(Square selected, Square target) {
     	Piece piece = selected.getPiece();
     	if(piece instanceof Pawn) {
             pawnFirstMove((Pawn)piece);
@@ -72,7 +72,7 @@ public class ChessGame extends BoardGame {
     	}
     	if(piece instanceof King)
     		kingCastling((King)piece, target);
-        super.endTurn(selected, target);
+        return super.endTurn(selected, target);
     }
     
     /** Check and record the player turn when the pawn first move
