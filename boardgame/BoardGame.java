@@ -55,6 +55,17 @@ public abstract class BoardGame {
         return crp == player;
     }
     
+    /** Switch two players' turn. */
+    public final void switchSide() {
+    	if (crp == white) { //switch move side
+            white.endTurn();
+            crp = black;
+        } else {
+            black.endTurn();
+            crp = white;
+        }
+    }
+    
     /** Move the selected Piece to the target Square, try to delete the piece
      * of the target Square from the opponent player's bracket and end 
      * the current player's turn.
@@ -65,18 +76,11 @@ public abstract class BoardGame {
      * @param target
      *              the target Square that the selected Piece move to
      */
-    public boolean endTurn(Square selected, Square target) { 
+    public void endTurn(Square selected, Square target) { 
     	try {
     		target.getPiece().player.delPiece(target.getPiece());
     	} catch (NullPointerException ex) {/* target square has no piece */}
         board.movePiece(selected, target);
-        if (crp == white) { //switch move side
-            white.endTurn();
-            crp = black;
-        } else {
-            black.endTurn();
-            crp = white;
-        }
-        return true;
+        switchSide();
     } 
 }

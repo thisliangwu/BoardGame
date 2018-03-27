@@ -8,13 +8,13 @@
 
 .green-square {
     -fx-background-color: #769656;
-    -fx-border-width: 1.5px;
+    /* -fx-border-width: 1.5px; */
     -fx-border-color: rgb(100, 93, 93);
 }
 
 .yellow-square{
     -fx-background-color: #eeeed2;
-    -fx-border-width: 1.5px;
+    /* -fx-border-width: 1.5px; */
     -fx-border-color: rgb(100, 93, 93);
 }
 
