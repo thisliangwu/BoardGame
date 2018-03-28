@@ -44,14 +44,23 @@ public class CheckerGame extends BoardGame {
     }
 	
     @Override
-    public boolean endTurn(Square selected, Square target) {
+    public void endTurn(Square selected, Square target) {
     	/* promotion if the selected piece reach the other end */
     	promote(selected.getPiece(), target);
-    	/* if capture successfully, the selected piece move again */
-    	if(capture(selected, target)) {
     		
-    	}
-    	return super.endTurn(selected, target);
+    	if(capture(selected, target)) {
+    		board.movePiece(selected, target);
+	    	if(secondCapture(target))
+	    		return;
+	    	else {
+	    		for(Piece p : target.getPiece().player.getAllPieceAsArray())
+	    			((Checker)p).enableMove();
+	    		switchSide();
+	    	}	
+    	} else {
+    		board.movePiece(selected, target);
+        	switchSide();
+    	}	
     }
     
     /** Return true or false the provide men piece is promoted to king piece. */
@@ -67,16 +76,33 @@ public class CheckerGame extends BoardGame {
     	return false;
     }
     
-    /** Return true or false the middle piece is capture. */
+    /** Return true or false the middle piece is captured. */
     private boolean capture(Square selected, Square target) {
     	Piece piece = selected.getPiece();
-    	if(piece instanceof Men && ((Men) piece).isCapture(target, board)
-    			|| piece instanceof King && ((King) piece).isCapture(target, board)) {
+    	if(((Checker) piece).isCapture(target, board)) {
     		Piece capture =  board.getSquare((selected.X + target.X) / 2, (selected.Y + target.Y) / 2).getPiece();
     		capture.player.delPiece(capture);
     		capture.getSquare().setPiece(null);
     		return true; 
     	}
+    	return false;
+    }
+    
+    /** If the selected piece can capture a second time, it has to move and all other
+     * piece is diabled to move. */
+    private boolean secondCapture(Square selected) {
+    	Piece sp = selected.getPiece();
+    	for(int i = 0; i < BOARDSIZE; i++)
+    	for(int j = 0; j < BOARDSIZE; j++)
+    		if(((Checker)sp).isCapture(board.getSquare(i, j), board)) {
+//    	Player opo = sp.player == white ? black : white;
+//    	for(Piece target : opo.getAllPieceAsArray())
+//    		if(((Checker)sp).isCapture(target.getSquare(), board)) {
+    			for(Piece p : sp.player.getAllPieceAsArray())
+    				if(p != sp)
+    					((Checker)p).diableMove();
+    			return true;
+    		}	
     	return false;
     }
     
@@ -87,6 +113,8 @@ public class CheckerGame extends BoardGame {
     
     @Override
 	public boolean isChecked(Player player) {
+    	if(player.getAllPieceAsArray().length == 0)
+    		throw new NullPointerException();
 		return false;
 	}
 }
